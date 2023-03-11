@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "262016141721",
+    "project_id": "cfl-app-22a32",
+    "storage_bucket": "cfl-app-22a32.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:262016141721:android:b42736cf99786bc31e2b08",
+        "android_client_info": {
+          "package_name": "com.example.cfl_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "262016141721-26sngff3mg6ekvnbreldd5n6v447rfan.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB6HfHbwRvvwv7WeXaOZpM_EMJm0zXQqE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "262016141721-26sngff3mg6ekvnbreldd5n6v447rfan.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
