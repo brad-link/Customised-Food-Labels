@@ -182,7 +182,7 @@ class _BarcodeScannerState extends State<BarcodeScanner> {
                           onPressed: codeScanned ? () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => HttpScreen(scanBarcode: scanBarcode)),
+                              MaterialPageRoute(builder: (context) => HttpScreen(scanBarcode: scanBarcode, mtlValues: null,)),
                             );
                           } : null,
                           child: const Text('Show Nutritional data',

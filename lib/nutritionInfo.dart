@@ -1,10 +1,15 @@
 import 'dart:convert';
 
+import 'package:cfl_app/TrafficValues.dart';
+import 'package:cfl_app/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cfl_app/product.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+
+import 'appUser.dart';
 
 int ref_calories = 2000;
 int ref_fat = 70;
@@ -19,9 +24,11 @@ String? productID = '';
 
 class HttpScreen extends StatelessWidget {
   final String scanBarcode;
+  final TrafficValues? mtlValues;
   const HttpScreen({
     Key? key,
     required this.scanBarcode,
+    required this.mtlValues,
 }) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -42,6 +49,7 @@ class HttpScreen extends StatelessWidget {
                 FutureBuilder<Product>(
                     future: getProduct(scanBarcode),
                     builder: (context, snapshot){
+
                       if(snapshot.hasData){
                         var product = snapshot.data;
                         final num cal_portion = product?.calories ?? 0;
@@ -146,10 +154,10 @@ class HttpScreen extends StatelessWidget {
                                   DataRow(
                                       color: MaterialStateProperty.resolveWith<Color?>(
                                               (Set<MaterialState> states){
-                                            num fatCheck = product?.fat_100g ?? 0;
-                                            if(fatCheck <= 3){
+                                            num? fatCheck = product?.fat_100g;
+                                            if(fatCheck! <= (mtlValues?.fatGreen ?? 3)){
                                               return Colors.green.withOpacity(0.4);
-                                            } else if(fatCheck < 17.5){
+                                            } else if(fatCheck < (mtlValues?.fatAmber ?? 17.5)){
                                               return Colors.orange.withOpacity(0.4);
                                             } else{
                                               return Colors.red.withOpacity(0.4);
@@ -168,9 +176,9 @@ class HttpScreen extends StatelessWidget {
                                       color: MaterialStateProperty.resolveWith<Color?>(
                                               (Set<MaterialState> states){
                                             num satFatCheck = product?.satFat_100g ?? 0;
-                                            if(satFatCheck <= 1.5){
+                                            if(satFatCheck <= (mtlValues?.satFatGreen ?? 1.5)){
                                               return Colors.green.withOpacity(0.4);
-                                            } else if(satFatCheck < 5){
+                                            } else if(satFatCheck < (mtlValues?.satFatAmber ?? 5.0)){
                                               return Colors.orange.withOpacity(0.4);
                                             } else{
                                               return Colors.red.withOpacity(0.4);
@@ -197,10 +205,10 @@ class HttpScreen extends StatelessWidget {
                                   DataRow(
                                       color: MaterialStateProperty.resolveWith<Color?>(
                                               (Set<MaterialState> states){
-                                            num sugarCheck = product?.sugar_100g ?? 0;
-                                            if(sugarCheck <= 5){
+                                            num? sugarCheck = product?.sugar_100g;
+                                            if(sugarCheck! <= (mtlValues?.sugarGreen ?? 5.0) ){
                                               return Colors.green.withOpacity(0.4);
-                                            } else if(sugarCheck <= 22.5){
+                                            } else if(sugarCheck <= (mtlValues?.sugarAmber ?? 22.5)){
                                               return Colors.orange.withOpacity(0.4);
                                             } else{
                                               return Colors.red.withOpacity(0.4);
@@ -218,10 +226,10 @@ class HttpScreen extends StatelessWidget {
                                   DataRow(
                                       color: MaterialStateProperty.resolveWith<Color?>(
                                               (Set<MaterialState> states){
-                                            num saltCheck = product?.salt_100g ?? 0;
-                                            if(saltCheck <= 0.3){
+                                            num? saltCheck = product?.salt_100g;
+                                            if(saltCheck! <= (mtlValues?.saltGreen ?? 0.3)){
                                               return Colors.green.withOpacity(0.4);
-                                            } else if(saltCheck <= 1.5){
+                                            } else if(saltCheck <= (mtlValues?.saltAmber ?? 1.5)){
                                               return Colors.orange.withOpacity(0.4);
                                             } else{
                                               return Colors.red.withOpacity(0.4);

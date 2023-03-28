@@ -1,10 +1,14 @@
 import 'package:cfl_app/auth.dart';
 import 'package:cfl_app/main.dart';
 import 'package:cfl_app/screens/home/settings_form.dart';
+import 'package:cfl_app/traffic_settings.dart';
+import 'package:cfl_app/traffic_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
+import '../../TrafficValues.dart';
+import '../../appUser.dart';
 import '../../loginScreen.dart';
 import '../../nutritionInfo.dart';
 import 'package:cfl_app/database.dart';
@@ -67,6 +71,14 @@ class _Home extends State<Home> {
         );
       });
     }
+    void nutritionSettings(){
+      showModalBottomSheet(context: context, builder: (context){
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 50.0),
+          //child: const TrafficSheet(),
+        );
+      });
+    }
     return StreamProvider<QuerySnapshot?>.value(
     value: DatabaseService().user,
       initialData: null,
@@ -90,6 +102,14 @@ class _Home extends State<Home> {
                 value: 2,
                 child: Row(
                   children: [
+                    Text("update nutrition preferences")
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: 3,
+                child: Row(
+                  children: [
                     Text("Sign out")
                   ],
                 ),
@@ -99,7 +119,14 @@ class _Home extends State<Home> {
               if (value==1){
                 _showSettings();
               }
-              if(value== 2){
+              if (value==2){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => TrafficSettings()),
+                );
+                //nutritionSettings();
+              }
+              if(value== 3){
                   await _auth.signOut();
                 }
               },
@@ -136,15 +163,20 @@ class _Home extends State<Home> {
                     ),
                     SizedBox(
                       height: 45,
-                      child: ElevatedButton(
+                      child: ElevatedButton (
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
                           ),
-                          onPressed: codeScanned ? () {
+                          onPressed: codeScanned ? () async {
+                            final navigator = context;
+                            AppUser? user = Provider.of<AppUser?>(context, listen: false);
+                            TrafficValues? currentValues = await DatabaseService(uid: user?.uid).getMTL();
+                            if(mounted){
                             Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => HttpScreen(scanBarcode: scanBarcode)),
+                              navigator,
+                              MaterialPageRoute(builder: (context) => HttpScreen(scanBarcode: scanBarcode, mtlValues: currentValues,)),
                             );
+                            }
                           } : null,
                           child: const Text('Show Nutritional data',
                               style: TextStyle(

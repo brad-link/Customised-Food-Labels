@@ -17,8 +17,8 @@ class Product{
   final num? sat_fat;
   final num? sat_fat100g;
   final num? satFat_100g;
-  final String serve_size;
-  final String quantity;
+  final String? serve_size;
+  final String? quantity;
 
 
   Product({

@@ -1,3 +1,4 @@
+import 'package:cfl_app/screens/account_setup.dart';
 import 'package:cfl_app/screens/home/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -30,10 +31,10 @@ class _RegisterState extends State<Register> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              'Login',
+              'Register',
               style: TextStyle(
                   fontSize: 35,
-                  color: Colors.blue,
+                  color: Colors.green,
                   fontWeight: FontWeight.bold
               ),
             ),
@@ -91,7 +92,7 @@ class _RegisterState extends State<Register> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) =>
-                                Home()),
+                                SetupForm()),
                           );
                         }
 

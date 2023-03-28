@@ -1,3 +1,5 @@
+import 'package:cfl_app/TrafficValues.dart';
+
 class UserData{
   final String? uid;
   final String? name;
