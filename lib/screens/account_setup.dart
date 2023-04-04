@@ -21,6 +21,7 @@ class _SetupFormState extends State<SetupForm> {
   String? name;
   num? height;
   num? currentWeight;
+  String? gender;
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +54,13 @@ class _SetupFormState extends State<SetupForm> {
                       validator: (value) => value!.isEmpty ? "Enter Your Name" : null,
                     ),
                     ),
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 2.0),
+                    Padding(padding: const EdgeInsets.symmetric(horizontal: 2.0),
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.digitsOnly
                         ],
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Current weight(kg): ',
                         ),
                         validator: (value) =>value!.isEmpty ? "enter your weight" : null,
@@ -72,7 +73,7 @@ class _SetupFormState extends State<SetupForm> {
                         },
                       ),
                     ),
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 2.0),
+                    Padding(padding: const EdgeInsets.symmetric(horizontal: 2.0),
                       child: TextFormField(
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
@@ -91,7 +92,42 @@ class _SetupFormState extends State<SetupForm> {
                         },
                       ),
                     ),
-                    Padding(padding: EdgeInsets.symmetric(horizontal: 5.0),
+              Padding(padding: const EdgeInsets.symmetric(horizontal: 2.0),
+              child:Column(
+                children:[
+                  const Text('Gender: '),
+                Row(
+                children: [
+                  Expanded(
+                    child: RadioListTile<String>(
+                      title: const Text('Male'),
+                      value: 'Male',
+                      groupValue: gender,
+                      onChanged: (String? value) {
+                        setState(() {
+                          gender = value;
+                        });
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: RadioListTile<String>(
+                      title: const Text('Female'),
+                      value: 'Female',
+                      groupValue: gender,
+                      onChanged: (String? value) {
+                        setState(() {
+                          gender = value;
+                        });
+                      },
+                    ),
+                  ),
+                ],
+              ),
+                ],
+              ),
+              ),
+                    Padding(padding: const EdgeInsets.symmetric(horizontal: 5.0),
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.green
@@ -107,7 +143,7 @@ class _SetupFormState extends State<SetupForm> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) =>
-                                    Home()),
+                                    const Home()),
                               );
                             }
 

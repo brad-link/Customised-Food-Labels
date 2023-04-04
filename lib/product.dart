@@ -19,6 +19,7 @@ class Product{
   final num? satFat_100g;
   final String? serve_size;
   final String? quantity;
+  final num? serving_quantity;
 
 
   Product({
@@ -42,6 +43,7 @@ class Product{
     required this.sat_fat100g,
     required this.serve_size,
     required this.quantity,
+    required this.serving_quantity,
   });
 
   factory Product.fromJson(final json){
@@ -66,6 +68,7 @@ class Product{
       sat_fat100g: json["product"]["nutriments"]["saturated-fat_100g"],
       serve_size: json["product"]["serving_size"].toString(),
       quantity: json["product"]["quantity"].toString(),
+      serving_quantity: json["product"]["serving_quantity"],
 
     );
   }

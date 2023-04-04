@@ -1,6 +1,7 @@
 import 'package:cfl_app/auth.dart';
 import 'package:cfl_app/main.dart';
 import 'package:cfl_app/screens/home/settings_form.dart';
+import 'package:cfl_app/screens/scannedScreen.dart';
 import 'package:cfl_app/traffic_settings.dart';
 import 'package:cfl_app/traffic_sheet.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class Home extends StatefulWidget {
 }
 class _Home extends State<Home> {
   final Auth _auth = Auth();
-  //String _scanBarcode = 'Unknown';
+
   /// For Continuous scan
   Future<void> startBarcodeScanStream() async {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
@@ -174,7 +175,7 @@ class _Home extends State<Home> {
                             if(mounted){
                             Navigator.push(
                               navigator,
-                              MaterialPageRoute(builder: (context) => HttpScreen(scanBarcode: scanBarcode, mtlValues: currentValues,)),
+                              MaterialPageRoute(builder: (context) => ScannedScreen(scanBarcode: scanBarcode) /*HttpScreen(scanBarcode: scanBarcode, mtlValues: currentValues,)*/),
                             );
                             }
                           } : null,
