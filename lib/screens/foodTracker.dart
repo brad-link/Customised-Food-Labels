@@ -12,7 +12,7 @@ import '../auth.dart';
 import '../database.dart';
 import '../traffic_settings.dart';
 import 'home/settings_form.dart';
-
+/*
 bool codeScanned = false;
 String scanBarcode = '';
 
@@ -35,11 +35,11 @@ class FoodTracker extends  StatefulWidget {
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
-    if (!mounted) return;
+    /*if (!mounted) return;
     setState(() {
       scanBarcode = barcodeScanRes;
       codeScanned = true;
-    });
+    });*/
   }
 
   @override
@@ -161,4 +161,4 @@ class _FoodTrackerState extends State<FoodTracker> {
           )]));
         }));
   }
-}
+}*/

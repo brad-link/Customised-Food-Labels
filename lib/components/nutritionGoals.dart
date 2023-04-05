@@ -1,4 +1,4 @@
-class NutritionGoals{
+/*class NutritionGoals{
   final String gender;
   final int age;
   final int height;
@@ -8,7 +8,7 @@ class NutritionGoals{
 
   NutritionGoals(this.gender, this.age, this.height, this.weight, this.activity, this.goal)
 
-  int NutritionTarget{
+  /*int NutritionTarget{
     num target = (10*weight) + (6.25*height)-(5*age);
     if(gender == 'male'){
       target += 5;
@@ -19,5 +19,5 @@ class NutritionGoals{
 
   int Activity(int goal){
     if()
-  }
-}
+  }*/
+}*/

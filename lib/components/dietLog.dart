@@ -39,7 +39,7 @@ class DietLog{
       fat: data?['fat'],
       saturates: data?['saturates'],
       carbohydrates: data?['carbohydrates'],
-      sugars: data?['sugar'],
+      sugars: data?['sugars'],
       protein: data?['protein'],
       salt: data?['salt'],
       fibre: data?['fibre'],

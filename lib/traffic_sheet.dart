@@ -85,28 +85,7 @@ class _TrafficSheetState extends State<TrafficSheet> {
           ElevatedButton(
             onPressed: () async {
               print('choice $_choice');
-      /*switch (_choice) {
-        case 0:
-          {
-            await DatabaseService().updateMTL('fatGreen', 'fatAmber', _green!, _amber!);
-            break;
-          }
-        case 1:
-          {
-            await DatabaseService().updateMTL('satFatGreen', 'satFatAmber', _green!, _amber!);
-            break;
-          }
-        case 2:
-          {
-            await DatabaseService().updateMTL('sugarGreen', 'sugarAmber', _green!, _amber!);
-            break;
-          }
-        case 3:
-          {
-            await DatabaseService().updateMTL('sugarGreen', 'sugarAmber', _green!, _amber!);
-            break;
-          }
-      }*/
+
               AppUser? user = Provider.of<AppUser?>(context, listen: false);
               TrafficValues? currentValues = await DatabaseService(uid: user?.uid).getMTL();
               TrafficValues newValues = TrafficValues(

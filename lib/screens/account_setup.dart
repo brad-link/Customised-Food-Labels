@@ -1,4 +1,5 @@
 import 'package:cfl_app/TrafficValues.dart';
+import 'package:cfl_app/screens/home/homeScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -143,7 +144,7 @@ class _SetupFormState extends State<SetupForm> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (context) =>
-                                    const Home()),
+                                    const HomeScreen()),
                               );
                             }
 

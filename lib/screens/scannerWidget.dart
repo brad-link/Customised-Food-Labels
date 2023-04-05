@@ -13,21 +13,24 @@ String scanBarcode = '';
 bool codeScanned = false;
 
 class Scanner extends StatefulWidget {
-  const Scanner({Key? key}) : super(key: key);
+  final VoidCallback scanButton;
+  final VoidCallback displayButton;
+  const Scanner({Key? key, required this.scanButton, required this.displayButton}) : super(key: key);
 
   @override
   State<Scanner> createState() => _ScannerState();
 }
 
 class _ScannerState extends State<Scanner> {
-
   Future startBarcodeScanStream() async {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
-        '#ff6666', 'Cancel', true, ScanMode.BARCODE)!
+            '#ff6666', 'Cancel', true, ScanMode.BARCODE)!
         .listen((barcode) => print(barcode));
   }
+
   Future barcodeScan() async {
     String barcodeScanRes;
+    widget.scanButton;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
@@ -46,43 +49,54 @@ class _ScannerState extends State<Scanner> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 200,
+        width: 200,
         alignment: Alignment.center,
         child: Flex(
             direction: Axis.vertical,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               SizedBox(
-                height: 45,
+                  height: 40,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                      ),
+                      onPressed: () => barcodeScan(),
+                      child: const Text('Barcode Scan',
+                          style: TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.bold))),
+                ),
+
+              SizedBox(
+                height: 40,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                     ),
-                    onPressed: () => barcodeScan(),
-                    child: const Text('Barcode Scan',
-                        style: TextStyle(
-                            fontSize: 17, fontWeight: FontWeight.bold))),
-              ),
-              SizedBox(
-                height: 45,
-                child: ElevatedButton (
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                    ),
-                    onPressed: codeScanned ? () async {
-                      final navigator = context;
-                      AppUser? user = Provider.of<AppUser?>(context, listen: false);
-                      TrafficValues? currentValues = await DatabaseService(uid: user?.uid).getMTL();
-                      if(mounted){
-                        Navigator.push(
-                          navigator,
-                          MaterialPageRoute(builder: (context) => ScannedScreen(scanBarcode: scanBarcode) /*HttpScreen(scanBarcode: scanBarcode, mtlValues: currentValues,)*/),
-                        );
-                      }
-                    } : null,
+                    onPressed: codeScanned
+                        ? () async {
+                      widget.displayButton;
+                            final navigator = context;
+                            AppUser? user =
+                                Provider.of<AppUser?>(context, listen: false);
+                            TrafficValues? currentValues =
+                                await DatabaseService(uid: user?.uid).getMTL();
+                            if (mounted) {
+                              Navigator.push(
+                                navigator,
+                                MaterialPageRoute(
+                                    builder: (context) => ScannedScreen(
+                                        scanBarcode:
+                                            scanBarcode) /*HttpScreen(scanBarcode: scanBarcode, mtlValues: currentValues,)*/),
+                              );
+                            }
+                          }
+                        : null,
                     child: const Text('Show Nutritional data',
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold))),
-
-              )]));
+              ),
+            ]));
   }
 }
