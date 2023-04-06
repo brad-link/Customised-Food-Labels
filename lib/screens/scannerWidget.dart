@@ -1,16 +1,22 @@
+import 'dart:convert';
+
 import 'package:cfl_app/screens/scannedScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
 import '../TrafficValues.dart';
 import '../appUser.dart';
 import '../database.dart';
+import '../product.dart';
+import 'ScannedScreen2.dart';
 
 String scanBarcode = '';
 bool codeScanned = false;
+bool productExists = true;
 
 class Scanner extends StatefulWidget {
   final VoidCallback scanButton;
@@ -39,12 +45,27 @@ class _ScannerState extends State<Scanner> {
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
-    if (!mounted) return;
-    setState(() {
-      scanBarcode = barcodeScanRes;
-      codeScanned = true;
-    });
-  }
+    if (!mounted) {
+      setState(() {
+        codeScanned = false;
+      });
+      return;
+    }
+    final url =
+        "https://world.openfoodfacts.org/api/v0/product/$barcodeScanRes.json";
+    final response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      final jsonProduct = jsonDecode(response.body);
+      Product product = Product.fromJson(jsonProduct);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ScannedScreen(product: product)));
+    } else {
+      setState(() {
+        productExists = false;
+      });
+    }
+    }
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +88,9 @@ class _ScannerState extends State<Scanner> {
                           style: TextStyle(
                               fontSize: 17, fontWeight: FontWeight.bold))),
                 ),
-
-              SizedBox(
+             if(productExists == false)
+             Text('Product not found in Database'),
+             /* SizedBox(
                 height: 40,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -78,10 +100,6 @@ class _ScannerState extends State<Scanner> {
                         ? () async {
                       widget.displayButton;
                             final navigator = context;
-                            AppUser? user =
-                                Provider.of<AppUser?>(context, listen: false);
-                            TrafficValues? currentValues =
-                                await DatabaseService(uid: user?.uid).getMTL();
                             if (mounted) {
                               Navigator.push(
                                 navigator,
@@ -96,7 +114,19 @@ class _ScannerState extends State<Scanner> {
                     child: const Text('Show Nutritional data',
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold))),
-              ),
+              ),*/
             ]));
+  }
+}
+Future<Product> getProduct(scanBarcode) async {
+  final url =
+      "https://world.openfoodfacts.org/api/v0/product/$scanBarcode.json";
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    final jsonProduct = jsonDecode(response.body);
+    return Product.fromJson(jsonProduct);
+  } else {
+    throw Exception();
   }
 }

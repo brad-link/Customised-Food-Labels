@@ -1,6 +1,7 @@
 
 import 'package:cfl_app/screens/authenticate/register.dart';
 import 'package:cfl_app/screens/home/home.dart';
+import 'package:cfl_app/screens/home/homeScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'auth.dart';
@@ -96,7 +97,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) =>
-                              Home()),
+                              HomeScreen(),
+                          ),
                         );
                       }
 

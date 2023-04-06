@@ -6,12 +6,13 @@ import 'package:cfl_app/product.dart';
 import 'package:cfl_app/valueCard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
 import '../TrafficValues.dart';
 import '../appUser.dart';
-
+/*
 class ScannedScreen extends StatefulWidget {
   final String scanBarcode;
   const ScannedScreen({Key? key, required this.scanBarcode}) : super(key: key);
@@ -54,6 +55,7 @@ class _ScannedScreenState extends State<ScannedScreen> {
                           child: Flex(
                             direction: Axis.vertical,
                             children: <Widget>[
+                              Text(product!.productName),
                               Row(
                                 children: [
                                   Expanded(
@@ -281,7 +283,23 @@ class _ScannedScreenState extends State<ScannedScreen> {
                                       } else {
                                         return const CircularProgressIndicator();
                                       }
-                                    })
+                                    }),
+                              /*TextFormField(
+                                  keyboardType: TextInputType.number,
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                  decoration: const InputDecoration(
+                                    labelText: 'number of servings: ',
+                                  ),
+                                  validator: (value) =>value!.isEmpty ? "enter your weight" : null,
+                                  onChanged: (value) {
+                                    if (value.isEmpty) {
+                                      height = null;
+                                    } else {
+                                      height = num.tryParse(value);
+                                    }
+                                  })*/
                             ],
                           ),
                         );
@@ -334,4 +352,4 @@ Future<Product> getProduct(scanBarcode) async {
   } else {
     throw Exception();
   }
-}
+}*/

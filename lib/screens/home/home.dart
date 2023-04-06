@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../userData.dart';
-
+/*
 int ref_calories = 2000;
 int ref_fat = 70;
 int ref_carbs = 260;
@@ -186,4 +186,4 @@ class _Home extends State<Home> {
                     )]));
         })));
   }
-}
+}*/
