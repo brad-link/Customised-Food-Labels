@@ -1,23 +1,55 @@
-/*class NutritionGoals{
-  final String gender;
-  final int age;
-  final int height;
-  final int weight;
-  final int activity;
-  final int goal;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  NutritionGoals(this.gender, this.age, this.height, this.weight, this.activity, this.goal)
+class NutritionGoals{
+  final int? calories;
+  final int? fat;
+  final int? saturates;
+  final int? carbohydrates;
+  final int? sugars;
+  final int? protein;
+  final int? salt;
+  //final int? fibre;
 
-  /*int NutritionTarget{
-    num target = (10*weight) + (6.25*height)-(5*age);
-    if(gender == 'male'){
-      target += 5;
-  } else{
-      target +- 161;
-    }
+  NutritionGoals({
+    this.calories = 2000,
+    this.fat = 70,
+    this.saturates = 20,
+    this.carbohydrates = 260,
+    this.sugars = 90,
+    this.protein = 50,
+    this.salt = 6,
+    //this.fibre = 30,
+  });
+
+
+  factory NutritionGoals.fromFirestore(
+      DocumentSnapshot<Map<String, dynamic>> snapshot,
+      SnapshotOptions? options,
+      ) {
+    final data = snapshot.data();
+    return NutritionGoals(
+      calories: data?['calories'],
+      fat: data?['fat'],
+      saturates: data?['saturates'],
+      carbohydrates: data?['carbohydrates'],
+      sugars: data?['sugars'],
+      protein: data?['protein'],
+      salt: data?['salt'],
+      //fibre: data?['fibre'],
+    );
   }
 
-  int Activity(int goal){
-    if()
-  }*/
-}*/
+  Map<String, dynamic> toFirestore() {
+    return {
+      if (calories != null) "calories": calories,
+      if (fat != null) "fat": fat,
+      if (saturates != null) "saturates": saturates,
+      if (carbohydrates != null) "carbohydrates": carbohydrates,
+      if (sugars != null) "sugars": sugars,
+      if (protein != null) "protein": protein,
+      if (salt != null) "salt": salt,
+      //if (fibre != null) "fibre": fibre,
+    };
+  }
+}
+

@@ -36,27 +36,13 @@ class Auth{
     try{
       UserCredential credential = await firebaseAuth.createUserWithEmailAndPassword(email: email, password: password);
       User? user= credential.user;
-      /*TrafficValues recommended = TrafficValues(
-        fatGreen: 3.0,
-        fatAmber: 17.5,
-        satFatGreen: 1.5,
-        satFatAmber: 5.0,
-        sugarGreen: 5.0,
-        sugarAmber: 22.5,
-        saltGreen: 0.3,
-        saltAmber: 1.5,
-      );*/
-
-      //String now = DateFormat('dd-MM-yyyy').format(DateTime.now());
       DateTime now = DateTime.now();
-      print('Local time: $now');
-
       DateTime date = DateTime(now.year, now.month, now.day);
       DateTime yesterday = date.subtract(const Duration(days: 1));
       DietLog previousDay = DietLog(date: yesterday);
       DietLog firstEntry = DietLog(date: date);
-      await DatabaseService(uid: user?.uid).updateLog(previousDay);
-      await DatabaseService(uid: user?.uid).updateLog(firstEntry);
+      await DatabaseService(uid: user?.uid).createLog(previousDay);
+      await DatabaseService(uid: user?.uid).createLog(firstEntry);
       await DatabaseService(uid: user!.uid).updateUserData('name', 0, 0);
       await DatabaseService(uid: user?.uid).setMTL(TrafficValues());
       return _userFromFireBaseUser(user);

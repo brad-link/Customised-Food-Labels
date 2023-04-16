@@ -8,20 +8,28 @@ class ValueCard extends StatelessWidget {
   final num? greenValue;
   final num? amberValue;
   final num? intake;
-  const ValueCard({Key? key, this.category, this.size, this.greenValue, this.amberValue, this.intake, this.serving}) : super(key: key);
+  final num? multiplier;
+  const ValueCard({Key? key, this.category, this.size, this.greenValue, this.amberValue, this.intake, this.serving, this.multiplier}) : super(key: key);
 
 
 
   @override
   Widget build(BuildContext context) {
     String? percOutput;
+    num? portionSize;
+    String portionRounded = '';
     if(size != null) {
-      num percentage = (size! / intake!) * serving!;
+      num percentage = ((size! / intake!) * serving!) * multiplier!;
+      portionSize =((size!/100) * serving! * multiplier!);
       percOutput = percentage.toStringAsFixed(2);
+      portionRounded = portionSize.toStringAsFixed(2);
     }
 
+
+
+
     Color getColour(num value){
-      if(value == -1){
+      if(value == -1 || greenValue == null || amberValue == null){
         return Colors.white10;
       }else if(value <= greenValue!){
         return Colors.green.withOpacity(0.4);
@@ -31,7 +39,13 @@ class ValueCard extends StatelessWidget {
         return Colors.red.withOpacity(0.4);
       }
     }
-    Widget card = Row(
+
+    return Column(
+      children: [
+        if(size != null)
+      Card(
+        color: getColour(size?? -1),
+        child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Expanded(
@@ -45,7 +59,7 @@ class ValueCard extends StatelessWidget {
         ),
         Expanded(
           child: Container(
-              child: Text('$size',
+              child: Text('$portionRounded',
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -62,15 +76,20 @@ class ValueCard extends StatelessWidget {
           ),
         ),
       ],
+    ),
+    ),
+        if(size == null)
+          Card(
+             child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('$category information unavailable')
+                ],
+              ),
+          )
+    ]
     );
-    if(size == null){
-      card = Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('$category information navailable')
-        ],
-      );
-    }
+    /*
     return Card(
       color: getColour(size?? -1),
      child: card,
@@ -106,6 +125,6 @@ class ValueCard extends StatelessWidget {
           ),
         ],
       ),*/
-    );
+    );*/
   }
 }

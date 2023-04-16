@@ -6,7 +6,8 @@ import '../traffic_settings.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget{
   final String title;
-  const CustomAppBar({Key? key, required this.title}) : super(key: key);
+  final IconButton? calendar;
+  const CustomAppBar({Key? key, required this.title, this.calendar}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +28,12 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget{
         );
       });
     }
-    return AppBar(title:  Text('$title'),
-      centerTitle: false,
+    return AppBar(
+      leading: calendar,
+      title:  Text('$title'),
+      centerTitle: true,
       automaticallyImplyLeading: false,
-      backgroundColor: Colors.green,
+      //backgroundColor: Colors.green,
       actions: [
         PopupMenuButton<int>(itemBuilder: (context) => [
           PopupMenuItem(

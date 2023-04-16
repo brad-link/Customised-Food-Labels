@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cfl_app/components/nutritionGoals.dart';
+import 'package:cfl_app/productSearch.dart';
 import 'package:cfl_app/screens/scannedScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,22 +21,26 @@ bool codeScanned = false;
 bool productExists = true;
 
 class Scanner extends StatefulWidget {
+  final DateTime date;
   final VoidCallback scanButton;
   final VoidCallback displayButton;
-  const Scanner({Key? key, required this.scanButton, required this.displayButton}) : super(key: key);
+  const Scanner({Key? key, required this.scanButton, required this.displayButton, required this.date}) : super(key: key);
 
   @override
   State<Scanner> createState() => _ScannerState();
 }
 
 class _ScannerState extends State<Scanner> {
+
+
+
   Future startBarcodeScanStream() async {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
             '#ff6666', 'Cancel', true, ScanMode.BARCODE)!
         .listen((barcode) => print(barcode));
   }
 
-  Future barcodeScan() async {
+  Future barcodeScan(NutritionGoals? nutriGoals) async {
     String barcodeScanRes;
     widget.scanButton;
     // Platform messages may fail, so we use a try/catch PlatformException.
@@ -51,24 +57,42 @@ class _ScannerState extends State<Scanner> {
       });
       return;
     }
+
     final url =
         "https://world.openfoodfacts.org/api/v0/product/$barcodeScanRes.json";
     final response = await http.get(Uri.parse(url));
 
+
     if (response.statusCode == 200) {
       final jsonProduct = jsonDecode(response.body);
+      if(jsonProduct['status'] == 1){
       Product product = Product.fromJson(jsonProduct);
-      Navigator.push(context, MaterialPageRoute(builder: (context) => ScannedScreen(product: product)));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => ScannedScreen(product: product, date: widget.date!, goals: nutriGoals,)));
     } else {
-      setState(() {
-        productExists = false;
+      print('Barcode ERROR');
+      showDialog(context: context, builder: (BuildContext context){
+        return AlertDialog(
+          title: const Text('Product Not Found'),
+          content: const Text('Add the product to the databse?'),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context),
+                child: const Text('No')),
+            TextButton(onPressed: () => Navigator.pop(context),
+                child: const Text('Add')),
+          ],
+        );
       });
+        //productExists = false;
+    }
+    } else{
+        throw Exception('failed to load data');
     }
     }
 
 
   @override
   Widget build(BuildContext context) {
+    AppUser? user = Provider.of<AppUser?>(context, listen: false);
     return Container(
       height: 200,
         width: 200,
@@ -83,38 +107,34 @@ class _ScannerState extends State<Scanner> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
                       ),
-                      onPressed: () => barcodeScan(),
+                      onPressed: () async {
+                        NutritionGoals? goals = await DatabaseService(uid: user?.uid).getNutritionGoals();
+                        barcodeScan(goals);},
                       child: const Text('Barcode Scan',
                           style: TextStyle(
                               fontSize: 17, fontWeight: FontWeight.bold))),
                 ),
-             if(productExists == false)
-             Text('Product not found in Database'),
-             /* SizedBox(
+             SizedBox(
                 height: 40,
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green,
                     ),
-                    onPressed: codeScanned
-                        ? () async {
+                    onPressed: () async {
                       widget.displayButton;
                             final navigator = context;
                             if (mounted) {
                               Navigator.push(
                                 navigator,
                                 MaterialPageRoute(
-                                    builder: (context) => ScannedScreen(
-                                        scanBarcode:
-                                            scanBarcode) /*HttpScreen(scanBarcode: scanBarcode, mtlValues: currentValues,)*/),
+                                    builder: (context) => ProductSearch(currentDate: widget.date,) /*HttpScreen(scanBarcode: scanBarcode, mtlValues: currentValues,)*/),
                               );
                             }
-                          }
-                        : null,
-                    child: const Text('Show Nutritional data',
+                          },
+                    child: const Text('Search Products',
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold))),
-              ),*/
+              ),
             ]));
   }
 }

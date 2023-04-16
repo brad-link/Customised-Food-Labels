@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 
 class NutritionBarCard extends StatelessWidget {
   final String category;
-  final int limit;
+  final int? limit;
   final int? value;
   const NutritionBarCard({Key? key, required this.category, required this.limit, required this.value}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     int _value;
-    if(value! > limit){
-      _value = limit - value!;
+    if(value! > limit!){
+      _value = (limit! - value!);
     } else {
       _value = value!;
     }
@@ -23,7 +23,8 @@ class NutritionBarCard extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Text('$category'),
+            SizedBox(width: 150,
+            child: Text('$category'),),
             Text('$_value'),
             Text('$limit'),
           ],
@@ -35,7 +36,7 @@ class NutritionBarCard extends StatelessWidget {
         ), child:
       Slider(
       min: 0.0,
-      max: limit.toDouble(),
+      max: limit!.toDouble(),
       value: _value.toDouble(),
         onChanged: (value) {},
       ),

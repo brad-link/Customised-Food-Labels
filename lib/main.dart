@@ -4,6 +4,7 @@ import 'package:cfl_app/Wrapper.dart';
 import 'package:cfl_app/appUser.dart';
 import 'package:cfl_app/auth.dart';
 import 'package:cfl_app/loginScreen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cfl_app/product.dart';
@@ -16,6 +17,10 @@ import 'package:firebase_core/firebase_core.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  FirebaseFirestore.instance.settings = const Settings(
+    persistenceEnabled: true,
+    cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+  );
   runApp(MyApp());
 }
 
@@ -42,6 +47,22 @@ class MyApp extends StatelessWidget {
       initialData: null,
       value: Auth().user,
       child: MaterialApp(
+        theme: ThemeData(
+          colorScheme: ColorScheme(
+            primary: Colors.green,
+            onPrimary: Colors.white,
+            secondary: Colors.green,
+            onSecondary: Colors.white,
+            background: Colors.white,
+            onBackground: Colors.black,
+            surface: Colors.grey,
+            onSurface: Colors.black,
+            brightness: Brightness.light,
+            error: Colors.green,
+            onError: Colors.green,
+          ),
+
+        ),
           debugShowCheckedModeBanner: false,
         home: Wrapper()
         // BarcodeScanner()

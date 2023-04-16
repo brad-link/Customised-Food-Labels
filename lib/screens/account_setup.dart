@@ -1,4 +1,5 @@
 import 'package:cfl_app/TrafficValues.dart';
+import 'package:cfl_app/components/nutritionGoals.dart';
 import 'package:cfl_app/screens/home/homeScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -139,6 +140,8 @@ class _SetupFormState extends State<SetupForm> {
                                   name,
                                   height,
                                   currentWeight,);
+                              NutritionGoals goals = NutritionGoals();
+                              await DatabaseService(uid: user?.uid).setNutritionGoals(goals);
                               //await DatabaseService(uid: user?.uid).updateMTL(
                                   //3.0, 17.5, 1.5, 5.0, 5.0, 22.5, 0.3, 1.5);
                               Navigator.push(

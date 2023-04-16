@@ -1,5 +1,6 @@
 import 'package:cfl_app/components/customAppBar.dart';
 import 'package:cfl_app/components/nutritionWidget.dart';
+import 'package:cfl_app/dailyProducts.dart';
 import 'package:cfl_app/database.dart';
 import 'package:cfl_app/screens/home/logEntry.dart';
 import 'package:cfl_app/screens/scannerWidget.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../appUser.dart';
@@ -27,7 +29,44 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final Auth _auth = Auth();
-  late PageController controller = PageController();
+  late PageController controller;
+  late String title;
+  late DateTime chosenDate;
+
+  @override
+  initState(){
+    super.initState();
+    chosenDate = DateTime.now();
+
+  }
+
+  Future chooseDate(BuildContext context, DateTime firstDate, DateTime currentDate, List<DietLog> tracker) async{
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: currentDate,
+        firstDate: firstDate,
+        lastDate: DateTime.now(),
+    );
+    if(picked != null && picked != chosenDate){
+      setState(() {
+        chosenDate = picked;
+      });
+      getEntry(tracker, chosenDate);
+    }
+  }
+
+   getEntry(List<DietLog> tracker, DateTime chosenDate){
+    int chosenIndex = 0;
+    for(int i = 0; i < tracker.length; i++){
+      if(tracker[i].date == chosenDate){
+        chosenIndex = i;
+      }
+      controller.animateToPage(
+          chosenIndex,
+          duration: Duration(milliseconds: 200),
+          curve: Curves.easeIn);
+    }
+  }
 
   /// For Continuous scan
   Future<void> startBarcodeScanStream() async {
@@ -38,7 +77,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> barcodeScan() async {
     String barcodeScanRes;
-    // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancel', true, ScanMode.QR);
@@ -56,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     AppUser? user = Provider.of<AppUser?>(context, listen: false);
-    return StreamBuilder<List<DietLog?>>(
+    return StreamBuilder<List<DietLog>>(
         stream: DatabaseService(uid: user?.uid).nutritionTracker,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
@@ -69,19 +107,35 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
 
-          List<DietLog?> tracker = snapshot.data!;
-          print(tracker);
+          List<DietLog> tracker = snapshot.data!;
+          checkIfExists(tracker, user!);
+          controller = PageController(initialPage: 0);
+          DateTime firstDate = tracker.last.date;
 
           return PageView.builder(
             controller: controller,
+            reverse: true,
             itemCount: tracker.length,
             itemBuilder: (context, index) {
               DietLog? day = tracker[index];
               DateTime? date = day?.date;
-              num? cals = day?.calories;
+              print(date.toString());
+              String today = DateFormat('dd-MM-yyyy').format(DateTime.now());
+              String yesterday = DateFormat('dd-MM-yyyy').format(DateTime.now().subtract(Duration(days: 1)));
+              String dateString = DateFormat('dd-MM-yyyy').format(day.date);
+              if(dateString == today){
+                title = 'Today';
+              } else if(dateString == yesterday){
+                title = 'Yesterday';
+              } else{
+                title = DateFormat('d MMMM y').format(date!);
+              }
               return Scaffold(
                 appBar: CustomAppBar(
-                  title: date.toString(),
+                  title: title,
+                  calendar: IconButton(
+                      onPressed: () => chooseDate(context, firstDate, date!, tracker),
+                      icon: const Icon(Icons.calendar_today)),
                 ),
                 body: Builder(
                   builder: (BuildContext context) {
@@ -93,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                         children: [
                           Padding(padding: EdgeInsets.all(12.0),
-                            child: Scanner(
+                            child: Scanner(date: date!,
                               scanButton: () {  },
                               displayButton: () {  },),
 
@@ -103,6 +157,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: NutritionWidget(input: day),
                           ),
                           ),
+                          Padding(padding: EdgeInsets.all(12.0),
+                              child: DailyProducts(currentDate: date!,),
+                          ),
                         ],
                       ),
                     ),
@@ -110,41 +167,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               );
-              /* Container(
-                  padding: EdgeInsets.all(14.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('$date'),
-                      Text('$cals')
-                    ],
-                  ),
-                );*/
-            },
-            onPageChanged: (index) {
-              if (index < tracker.length) {
-                DateTime? current = tracker[index]?.date;
-                DateTime? next = tracker[index + 1]?.date;
-                num difference = next?.difference(current!).inDays as num;
-                if (difference > 1) {
-                  controller.jumpToPage(index + 1);
-                }
-              }
             },
           );
         });
+  }
 
-    /*return Scaffold(
-      appBar: AppBar(
-        title: Text('Food diary'),
-      ),
-      body: PageView.builder(
-          controller: controller,
-          itemCount: widget.diary.length,
-          itemBuilder: (context, index){
-            return LogEntry(entry: widget.diary[index]);
-          }),
-
-    );*/
+  void checkIfExists(List<DietLog> tracker, AppUser user) async{
+    DietLog currentDay = tracker[0];
+    DateTime lastEntry = tracker[0].date;
+    DateTime now = DateTime.now();
+    if(lastEntry != now){
+      while(lastEntry.isBefore(now.subtract(Duration(days: 1)))){
+        lastEntry = lastEntry.add(Duration(days: 1));
+        DietLog newEntry = DietLog(date: lastEntry);
+        await DatabaseService(uid: user.uid).createLog(newEntry);
+      }
+    }
   }
 }
