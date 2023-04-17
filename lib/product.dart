@@ -1,23 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:intl/intl.dart';
 
 class Product {
-  final String? code;
+  String? code;
   final String? productName;
-  final num? carbs;
+  num? carbs;
   final num? carbs_100g;
-  final num? calories;
+  num? calories;
   final num? calories_100g;
-  final num? fat;
+  num? fat;
   final num? fat_100g;
-  final num? protein;
+  num? protein;
   final num? protein_100g;
-  final num? sugar;
+  num? sugar;
   final num? sugar_100g;
-  final num? salt;
+  num? salt;
   final num? salt_100g;
-  final num? satFat;
+  num? satFat;
   final num? sat_fat;
   final num? sat_fat100g;
   final num? satFat_100g;
@@ -70,7 +70,27 @@ class Product {
     dateAdded = day;
     timeAdded = time;
     String? timeString = DateFormat('h:mm:ss a').format(time);
-    productID = (productName! + timeString)!;
+    productID = (productName! + timeString);
+  }
+
+  int macroValue(num? size, num? serving, num? multiplier){
+    int update = 0;
+    if(size != null){
+      update = ((size/100) * serving! * multiplier!).toInt();
+    }
+    return update;
+  }
+
+  Product setServingMacros(Product product){
+    product.fat =  macroValue(product.fat_100g, product.portion, product.numOfPortions);
+    product.calories= macroValue(product.calories_100g, product.portion, product.numOfPortions);
+    product.carbs =  macroValue(product.carbs_100g, product.portion, product.numOfPortions);
+    product.sugar = macroValue(product.sugar_100g, product.portion, product.numOfPortions);
+    product.salt = macroValue(product.salt_100g, product.portion, product.numOfPortions);
+    product.satFat = macroValue(product.sat_fat100g, product.portion, product.numOfPortions);
+    product.protein = macroValue(product.protein_100g, product.portion, product.numOfPortions);
+
+    return product;
   }
 
   factory Product.fromJson(final json) {
@@ -146,34 +166,34 @@ class Product {
     //SnapshotOptions? options,
   ) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-    Timestamp timestamp = data?['timeAdded'];
-    DateTime? dateTime = timestamp?.toDate();
+    Timestamp timestamp = data['timeAdded'];
+    DateTime? dateTime = timestamp.toDate();
     return Product(
-      code: data?['code'],
-      productName: data?['productName'],
-      carbs: data?['carbs'],
-      carbs_100g: data?['carbs_100g'],
-      calories: data?['calories'],
-      calories_100g: data?['calories_100g'],
-      fat: data?['fat'],
-      fat_100g: data?['fat_100g'],
-      protein: data?['protein'],
-      protein_100g: data?['protein_100g'],
-      sugar: data?['sugar'],
-      sugar_100g: data?['sugar_100g'],
-      salt: data?['salt'],
-      salt_100g: data?['salt_100g'],
-      satFat: data?['satFat'],
-      satFat_100g: data?['satFat_100g'],
-      sat_fat: data?['sat_fat'],
-      sat_fat100g: data?['sat_fat100g'],
-      serve_size: data?['serve_size'],
-      quantity: data?['quantity'],
+      code: data['code'],
+      productName: data['productName'],
+      carbs: data['carbs'],
+      carbs_100g: data['carbs_100g'],
+      calories: data['calories'],
+      calories_100g: data['calories_100g'],
+      fat: data['fat'],
+      fat_100g: data['fat_100g'],
+      protein: data['protein'],
+      protein_100g: data['protein_100g'],
+      sugar: data['sugar'],
+      sugar_100g: data['sugar_100g'],
+      salt: data['salt'],
+      salt_100g: data['salt_100g'],
+      satFat: data['satFat'],
+      satFat_100g: data['satFat_100g'],
+      sat_fat: data['sat_fat'],
+      sat_fat100g: data['sat_fat100g'],
+      serve_size: data['serve_size'],
+      quantity: data['quantity'],
       serving_quantity: data['serving_quantity'],
-      image: data?['image'],
-      portion: data?['portion'],
-      numOfPortions: data?['numOfPortions'],
-      dateAdded: data?['dateAdded'],
+      image: data['image'],
+      portion: data['portion'],
+      numOfPortions: data['numOfPortions'],
+      dateAdded: data['dateAdded'],
       timeAdded: timestamp.toDate(),
       productID: data['productID'],
     );

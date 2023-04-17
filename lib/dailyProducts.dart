@@ -50,7 +50,7 @@ class _DailyProductsState extends State<DailyProducts> {
                       //child:
                       ProductCardClick(product: products[index],
                         date: widget.currentDate,
-                        viewButton: () {},);
+                        viewButton: () {}, removeButton: () {},);
                    // }
                // );
               }),

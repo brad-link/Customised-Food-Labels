@@ -45,15 +45,15 @@ class ProductCard extends StatelessWidget {
             Column(
               children: [
                 Text(product.productName!),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
+
+
                     Text('Portion size: $portion'),
                     Text('Number of portions: $numPortions')
-                  ],
-                )
+
+
               ],
             )
+
           ],
         ),
       ],

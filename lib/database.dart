@@ -142,6 +142,19 @@ class DatabaseService {
   Future addProduct(Product product) async {
     return await productDetails.doc(product.productID).set(product.toFirestore());
   }
+   removeProductFromDay(Product product, DateTime date) async{
+     String day = DateFormat('dd-MM-yyyy').format(date);
+     await nutritionDetails.doc(day).update({
+       "calories": FieldValue.increment(-product.calories!),
+       "fat": FieldValue.increment(-product.fat!),
+       "saturates": FieldValue.increment(-product.satFat!),
+       "carbohydrates": FieldValue.increment(-product.carbs!),
+       "sugars": FieldValue.increment(-product.sugar!),
+       "protein": FieldValue.increment(-product.protein!),
+       "salt": FieldValue.increment(-product.salt!),
+     });
+    await productDetails.doc(product.productID).delete();
+  }
 
   Future<NutritionGoals?> getNutritionGoals() async {
     final nutritionRef = accountDetails.doc('Nutrition goals').withConverter(

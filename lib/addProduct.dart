@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 class AddProduct extends StatefulWidget {
   final String barcode;
-  const AddProduct({Key? key, required this.barcode}) : super(key: key);
+  final Product;
+  const AddProduct({Key? key, required this.barcode, this.Product}) : super(key: key);
 
   @override
   State<AddProduct> createState() => _AddProductState();
