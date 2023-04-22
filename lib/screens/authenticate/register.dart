@@ -21,6 +21,7 @@ class _RegisterState extends State<Register> {
     @override
     Widget build(BuildContext context) {
       return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('Login'),
           centerTitle: false,
@@ -89,10 +90,9 @@ class _RegisterState extends State<Register> {
                         if(result == null){
                           setState(() => error = 'invalid email address');
                         } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) =>
-                                SetupForm()),
+                          Navigator.of(
+                            context).pushReplacement(MaterialPageRoute(builder: (context) =>
+                                const SetupForm()),
                           );
                         }
 

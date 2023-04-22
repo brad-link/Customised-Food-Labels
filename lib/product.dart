@@ -4,27 +4,29 @@ import 'package:intl/intl.dart';
 
 class Product {
   String? code;
-  final String? productName;
+  String? productName;
   num? carbs;
-  final num? carbs_100g;
+  num? carbs_100g;
   num? calories;
-  final num? calories_100g;
+  num? calories_100g;
   num? fat;
-  final num? fat_100g;
+  num? fat_100g;
   num? protein;
-  final num? protein_100g;
+  num? protein_100g;
   num? sugar;
-  final num? sugar_100g;
+  num? sugar_100g;
   num? salt;
-  final num? salt_100g;
+  num? salt_100g;
   num? satFat;
-  final num? sat_fat;
-  final num? sat_fat100g;
-  final num? satFat_100g;
-  final String? serve_size;
-  final String? quantity;
-  final num? serving_quantity;
-  final String? image;
+  num? sat_fat;
+  num? sat_fat100g;
+  num? satFat_100g;
+  num? fibre;
+  num? fibre_100g;
+  String? serve_size;
+  String? quantity;
+  num? serving_quantity;
+  String? image;
   num? portion;
   num? numOfPortions;
   String? dateAdded;
@@ -50,6 +52,8 @@ class Product {
     this.satFat_100g,
     this.sat_fat,
     this.sat_fat100g,
+    this.fibre,
+    this.fibre_100g,
     this.serve_size,
     this.quantity,
     this.serving_quantity,
@@ -116,10 +120,10 @@ class Product {
       sugar_100g: json["product"]["nutriments"]['sugars_100g'],
       salt: json["product"]["nutriments"]['salt_serving'],
       salt_100g: json["product"]["nutriments"]['salt_100g'],
-      satFat: json["product"]["nutriments"]['saturated_fat_serving'],
-      satFat_100g: json["product"]["nutriments"]['saturated_fat_100g'],
       sat_fat: json["product"]["nutriments"]["saturated-fat"],
       sat_fat100g: json["product"]["nutriments"]["saturated-fat_100g"],
+      fibre: json["product"]["nutriments"]["fiber"],
+      fibre_100g: json["product"]["nutriments"]["fiber_100g"],
       serve_size: json["product"]["serving_size"].toString(),
       quantity: json["product"]["quantity"].toString(),
       serving_quantity: serveSize,
@@ -144,10 +148,10 @@ class Product {
       'sugar_100g': sugar_100g,
       'salt': salt,
       'salt_100g': salt_100g,
-      'satFat': satFat,
-      'satFat_100g': satFat_100g,
       'sat_fat': sat_fat,
       'sat_fat100g': sat_fat100g,
+      'fibre': fibre,
+      'fibre_100g' : fibre_100g,
       'serve_size': serve_size,
       'quantity': quantity,
       'serving_quantity': serving_quantity,
@@ -183,10 +187,10 @@ class Product {
       sugar_100g: data['sugar_100g'],
       salt: data['salt'],
       salt_100g: data['salt_100g'],
-      satFat: data['satFat'],
-      satFat_100g: data['satFat_100g'],
       sat_fat: data['sat_fat'],
       sat_fat100g: data['sat_fat100g'],
+      fibre: data['fibre'],
+      fibre_100g: data['fibre_100g'],
       serve_size: data['serve_size'],
       quantity: data['quantity'],
       serving_quantity: data['serving_quantity'],

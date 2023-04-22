@@ -13,6 +13,8 @@ class TrafficCard2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String? greenValue = value1?.toStringAsFixed(2);
+    String? amberValue = value2?.toStringAsFixed(2);
     void nutritionSettings() {
       showModalBottomSheet(
           context: context,
@@ -21,9 +23,9 @@ class TrafficCard2 extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 5.0),
               child:  TrafficSheet(
                 choice: choice,
-                green: value1 ?? 0,
-                amber: value2 ?? 0,
-                value: category ?? '',
+                green: value1,
+                amber: value2,
+                value: category,
               ),
             );
           });
@@ -34,7 +36,9 @@ class TrafficCard2 extends StatelessWidget {
         nutritionSettings();
       },
       child: Container(
-        decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+        decoration: BoxDecoration(
+            //borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.black)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -48,7 +52,7 @@ class TrafficCard2 extends StatelessWidget {
                 ),
               ),
             ),
-            Divider(),
+            //Divider(),
             Padding(
               padding: EdgeInsets.all(1.0),
               child: Row(
@@ -61,24 +65,19 @@ class TrafficCard2 extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Green: ',
+                            'Green: \n$greenValue',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text('$value1',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              )),
                         ],
                       ),
                     ),
                   ),
-                  SizedBox(
+                  /*SizedBox(
                     width: 16.0,
-                  ),
+                  ),*/
                   Expanded(
                     child: Container(
                       color: Colors.amber,
@@ -86,22 +85,15 @@ class TrafficCard2 extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Amber: ',
+                            'Amber: \n$amberValue',
                             style: TextStyle(
+
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text('$value2',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              )),
                         ],
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 16.0,
                   ),
                   Expanded(
                     child: Container(
@@ -110,16 +102,11 @@ class TrafficCard2 extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Red: ',
+                            'Red: \n>$amberValue',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text('>$value2',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              )),
                         ],
                       ),
                     ),

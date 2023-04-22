@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cfl_app/product.dart';
 import 'package:cfl_app/screens/scannedScreen.dart';
-import 'package:cfl_app/storedProduct.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,6 +28,9 @@ class ProductCardClick extends StatelessWidget {
     num? numPortions = product.numOfPortions;
     String? image = product.image;
     return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
       child: InkWell(
         onTap: () async {
           //print(product.productName);
@@ -71,8 +72,9 @@ class ProductCardClick extends StatelessWidget {
                 },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
+                      shape: const CircleBorder(),
                     ),
-                    child: Text('-'))
+                    child: const Text('-'))
               ],
             ),
           ],

@@ -1,18 +1,18 @@
 import 'dart:async';
+import 'dart:core';
 import 'dart:ui';
 
 import 'package:cfl_app/TrafficValues.dart';
 import 'package:cfl_app/components/dietLog.dart';
 import 'package:cfl_app/components/nutritionGoals.dart';
 import 'package:cfl_app/product.dart';
-import 'package:cfl_app/storedProduct.dart';
 import 'package:cfl_app/userData.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class DatabaseService {
-  final String? uid;
+  String? uid;
   DatabaseService({
     this.uid,
   }) {
@@ -21,6 +21,7 @@ class DatabaseService {
     accountDetails = userDocRef.collection("account");
     nutritionDetails = userDocRef.collection("nutrition");
     productDetails = userDocRef.collection("products");
+    productDB = FirebaseFirestore.instance.collection('Products');
   }
   late final CollectionReference userData;
   // = FirebaseFirestore.instance.collection("User Data");
@@ -31,6 +32,7 @@ class DatabaseService {
   late final CollectionReference accountDetails;
   late final CollectionReference nutritionDetails;
   late final CollectionReference productDetails;
+  late final CollectionReference productDB;
 
   Future updateUserData(String? name, num? height, num? weight) async {
     return await accountDetails.doc("personal details").set({
@@ -106,7 +108,7 @@ class DatabaseService {
 
   Future createLog(DietLog entry) async {
     String date = DateFormat('dd-MM-yyyy').format(entry.date);
-    print('Database $date');
+    //print('Database $date');
     //final date = entry?.date as String;
     return await nutritionDetails.doc(date).set(entry.toFirestore());
   }
@@ -139,8 +141,16 @@ class DatabaseService {
     );
   }
 
-  Future addProduct(Product product) async {
+  addProductToMeal(Product product, String meal) async{
+    return await nutritionDetails.doc(product.dateAdded).collection('food').doc(meal).set(product.toFirestore());
+  }
+
+  addProduct(Product product) async {
     return await productDetails.doc(product.productID).set(product.toFirestore());
+  }
+
+  Future productsList(Product product) async{
+    return await productDB.doc(product.productName).set(product.toFirestore());
   }
    removeProductFromDay(Product product, DateTime date) async{
      String day = DateFormat('dd-MM-yyyy').format(date);
@@ -199,7 +209,7 @@ class DatabaseService {
     });
     //.map(_foodTracker);
   }
-  Stream<List<Product>> getSavedProducts() {
+  Stream<List<Product>> getUsersSavedProducts() {
     List<Product> products = [];
     List<String?> names = [];
     return productDetails
@@ -216,13 +226,25 @@ class DatabaseService {
       return products;
     });
   }
+  Stream<List<Product>> getDBProducts() {
+    List<Product> products = [];
+    return productDB
+        .snapshots()
+        .map((QuerySnapshot querySnapshot){
+      for(var doc in querySnapshot.docs){
+        Product product = Product.fromFirestore(doc);
+          products.add(product);
+      }
+      return products;
+    });
+  }
   /*
   Future<List<Product>> getSavedProductsFuture() async {
     final snapshot = await productDetails.get();
     final products = snapshot.docs.map((doc) => Product.fromFirestore(doc)).toList();
     return products;
   }*/
-  Future<List<Product>> getSavedProductsFuture() async {
+  Future <List<Product>> getUsersProductsFuture() async {
     final snapshot = await productDetails.get();
     List<Product> products = [];
     List<String?> names = [];
@@ -236,6 +258,16 @@ class DatabaseService {
       }
     return products;
     }
+
+  Future<List<Product>> getSavedProductsFuture() async {
+    final snapshot = await productDB.get();
+    List<Product> products = [];
+    for (var doc in snapshot.docs) {
+      Product product = Product.fromFirestore(doc);
+        products.add(product);
+    }
+    return products;
+  }
 
 
 

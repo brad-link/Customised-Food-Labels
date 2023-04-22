@@ -3,7 +3,6 @@ import 'package:cfl_app/components/nutritionGoals.dart';
 import 'package:cfl_app/database.dart';
 import 'package:cfl_app/product.dart';
 import 'package:cfl_app/screens/scannedScreen.dart';
-import 'package:cfl_app/storedProduct.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

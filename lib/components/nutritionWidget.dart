@@ -46,6 +46,22 @@ class NutritionWidget extends StatelessWidget {
             final user = Provider.of<AppUser?>(context);
             return Container(
               child: Column(children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(width: 150,
+                      ),
+                    SizedBox( width: 40,
+                      child: Text('Total',
+                        textAlign: TextAlign.center,),),
+                    SizedBox( width: 40,
+                      child: Text('Target',
+                        textAlign: TextAlign.center,),),
+                    SizedBox( width: 40,
+                      child: Text('Left',
+                        textAlign: TextAlign.center,),),
+                  ],
+                ),
                 SizedBox(
                   height: 550,
                   child: ListView.builder(itemCount: 7,

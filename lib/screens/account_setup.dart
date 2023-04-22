@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../appUser.dart';
+import '../components/dietLog.dart';
 import '../database.dart';
 import '../userData.dart';
 import 'home/home.dart';

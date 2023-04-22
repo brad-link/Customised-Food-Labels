@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NutritionBarCard extends StatelessWidget {
@@ -10,34 +9,49 @@ class NutritionBarCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int _value;
-    if(value! > limit!){
-      _value = (limit! - value!);
+    String remaining;
+    bool overTarget = false;
+    int _limit = limit!;
+    if(value! > _limit){
+      //_value = (limit! - value!);
+      _value = (value! - limit!);
+      _limit = value!;
+      remaining = '-$_value';
+      overTarget = true;
     } else {
-      _value = value!;
+      _value = limit! - value!;
+      remaining = '$_value';
     }
     return Card(
       child: Padding(
-        padding: EdgeInsets.all(2.0),
+        padding: const EdgeInsets.all(2.0),
       child: Column(
         children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(width: 150,
-            child: Text('$category'),),
-            Text('$_value'),
-            Text('$limit'),
+            child: Text(category),),
+            SizedBox( width: 40,
+            child: Text('$value',
+              textAlign: TextAlign.center,),),
+            SizedBox( width: 40,
+              child: Text('$limit',
+                textAlign: TextAlign.center,),),
+            SizedBox( width: 40,
+              child: Text(remaining,
+                textAlign: TextAlign.center,),),
           ],
         ),
       SliderTheme(
         data: SliderThemeData(
-          activeTrackColor: Colors.green,
+          activeTrackColor: overTarget ? Colors.red : Colors.purple,
           thumbShape: SliderComponentShape.noThumb,
         ), child:
       Slider(
       min: 0.0,
-      max: limit!.toDouble(),
-      value: _value.toDouble(),
+      max: _limit.toDouble(),
+      value: value!.toDouble(),
         onChanged: (value) {},
       ),
       ),

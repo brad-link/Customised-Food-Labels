@@ -4,7 +4,6 @@ import 'package:cfl_app/product.dart';
 import 'package:cfl_app/productCard.dart';
 import 'package:cfl_app/productCardClick.dart';
 import 'package:cfl_app/screens/scannedScreen.dart';
-import 'package:cfl_app/storedProduct.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,11 +33,14 @@ class _DailyProductsState extends State<DailyProducts> {
               child: CircularProgressIndicator(),
             );
           }
+          if(snapshot.hasData){
           List<Product> products = snapshot.data!;
           print(products);
-
           return Container(
-            child: SizedBox(
+            child: Column(
+              children: [
+                const Text('Consumed Today'),
+            SizedBox(
               height: 200,
             child: ListView.builder(
             itemCount: products.length,
@@ -55,7 +57,12 @@ class _DailyProductsState extends State<DailyProducts> {
                // );
               }),
           ),
+            ],
+            ),
           );
+          } else{
+            return Container();
+          }
         });
   }
 }

@@ -25,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Login'),
         centerTitle: false,
@@ -34,13 +35,13 @@ class _LoginScreenState extends State<LoginScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
+          const Text(
             'Login',
-            style: TextStyle(
+            /*style: TextStyle(
                 fontSize: 35,
                 color: Colors.blue,
                 fontWeight: FontWeight.bold
-            ),
+            ),*/
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 30.0),
@@ -51,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: TextFormField(
                     keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Email',
                       hintText: 'Enter email',
                       prefixIcon: Icon(Icons.email),
@@ -69,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: TextFormField(
                     keyboardType: TextInputType.visiblePassword,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Password',
                       hintText: 'Enter password',
                       prefixIcon: Icon(Icons.password),
@@ -83,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       validator: (value) => value!.length < 6 ? "Enter a password 6+ chars long" : null
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.green
@@ -97,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) =>
-                              HomeScreen(),
+                              const HomeScreen(),
                           ),
                         );
                       }

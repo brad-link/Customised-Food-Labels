@@ -38,9 +38,22 @@ class Auth{
       User? user= credential.user;
       DateTime now = DateTime.now();
       DateTime date = DateTime(now.year, now.month, now.day);
+      DateTime addDays = date.subtract(const Duration(days: 7));
       DateTime yesterday = date.subtract(const Duration(days: 1));
       DietLog previousDay = DietLog(date: yesterday);
       DietLog firstEntry = DietLog(date: date);
+      /*if(addDays != now) {
+       while (addDays.isBefore(now.subtract(Duration(days: 1)))) {
+          DateTime day = addDays.add(Duration(days: 1));
+          DietLog newEntry = DietLog(date: day);
+          await DatabaseService(uid: user?.uid).createLog(newEntry);
+        }
+      }*/
+      for(int i=0; i<7; i++){
+        DateTime day = addDays.add(Duration(days: 1));
+        DietLog newEntry = DietLog(date: day);
+        await DatabaseService(uid: user?.uid).createLog(newEntry);
+      }
       await DatabaseService(uid: user?.uid).createLog(previousDay);
       await DatabaseService(uid: user?.uid).createLog(firstEntry);
       await DatabaseService(uid: user!.uid).updateUserData('name', 0, 0);

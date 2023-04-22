@@ -46,7 +46,12 @@ class _TrafficSheetState extends State<TrafficSheet> {
           SizedBox(height: 16),
           Container(
             width: double.infinity,
-          child: RangeSlider(
+          child:SliderTheme(
+            data: SliderThemeData(
+              activeTrackColor: Colors.green,
+              thumbShape: SliderComponentShape.noThumb,
+            ),child:
+          RangeSlider(
             values: RangeValues(0, _green!.toDouble()),
             min: 0,
             max: 100,
@@ -63,7 +68,8 @@ class _TrafficSheetState extends State<TrafficSheet> {
             divisions: 200,
           ),
           ),
-          Text('Green value for $_value < $_green /100g'),
+          ),
+          //Text('Green value for $_value < $_green /100g'),
           Container(
             width: double.infinity,
           child: RangeSlider(
@@ -80,6 +86,22 @@ class _TrafficSheetState extends State<TrafficSheet> {
             },
           ),
           ),
+          Container(
+            width: double.infinity,
+            child: RangeSlider(
+              values: RangeValues(_green!.toDouble(),_amber!.toDouble()),
+              min: 0,
+              max: 100,
+              onChanged: (values) {
+                setState(() {
+                  _amber = values.end;
+                  if(_green! > _amber!){
+                    _green = values.end;
+                  }
+                });
+              },
+            ),
+          ),
 
           SizedBox(height: 16),
           ElevatedButton(
@@ -95,8 +117,8 @@ class _TrafficSheetState extends State<TrafficSheet> {
                 satFatAmber: widget.choice == 1 ? _amber : currentValues?.satFatAmber,
                 sugarGreen: widget.choice == 2 ? _green : currentValues?.sugarGreen,
                 sugarAmber: widget.choice == 2 ? _amber : currentValues?.sugarAmber,
-                saltGreen: widget.choice == 3 ? _green : null,
-                saltAmber: widget.choice == 3 ? _amber : null,
+                saltGreen: widget.choice == 3 ? _green : currentValues?.saltGreen,
+                saltAmber: widget.choice == 3 ? _amber : currentValues?.saltAmber,
               );
               await DatabaseService(uid: user?.uid).setMTL(newValues);
               Navigator.pop(context);

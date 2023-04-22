@@ -1,14 +1,15 @@
+import 'package:cfl_app/userData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NutritionGoals{
-  final int? calories;
-  final int? fat;
-  final int? saturates;
-  final int? carbohydrates;
-  final int? sugars;
-  final int? protein;
-  final int? salt;
-  //final int? fibre;
+  int? calories;
+  int? fat;
+  int? saturates;
+  int? carbohydrates;
+  int? sugars;
+  int? protein;
+  int? salt;
+  int? fibre;
 
   NutritionGoals({
     this.calories = 2000,
@@ -18,8 +19,19 @@ class NutritionGoals{
     this.sugars = 90,
     this.protein = 50,
     this.salt = 6,
-    //this.fibre = 30,
+    this.fibre = 30,
   });
+
+  NutritionGoals setBMR(UserData user){
+    num bmr = 10* user.weight! + 6.25*user.height!;
+    if(user.sex == 'male'){
+      bmr += 5;
+    }
+    else{
+      bmr -= 161;
+    }
+    return NutritionGoals(calories: bmr.toInt());
+  }
 
 
   factory NutritionGoals.fromFirestore(

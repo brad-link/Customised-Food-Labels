@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:cfl_app/product.dart';
 import 'package:provider/provider.dart';
+import 'NavigationService.dart';
 import 'nutritionInfo.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
@@ -35,6 +36,22 @@ int ref_saturates = 20;
 String scanBarcode = '';
 bool codeScanned = false;
 String? productID = '';
+const myColor = Color(0xFF7B6AF2);
+/*MaterialColor myColor = const MaterialColor(
+  0xFF7B6AF2,
+  <int, Color>{
+    50: Color(0xFFE8E7F8),
+    100: Color(0xFFC5C3E3),
+    200: Color(0xFFA09CCE),
+    300: Color(0xFF7B6AF2),
+    400: Color(0xFF644DC9),
+    500: Color(0xFF4D31A1),
+    600: Color(0xFF372379),
+    700: Color(0xFF1F1452),
+    800: Color(0xFF0A002B),
+    900: Color(0xFF00001B),
+  },
+);*/
 
 
 
@@ -47,11 +64,14 @@ class MyApp extends StatelessWidget {
       initialData: null,
       value: Auth().user,
       child: MaterialApp(
+        //navigatorKey: NavigationService.navigatorKey,
+        //onGenerateRoute: ,
         theme: ThemeData(
-          colorScheme: ColorScheme(
-            primary: Colors.green,
+          //primarySwatch: myColor,
+          colorScheme: const ColorScheme(
+            primary: myColor,
             onPrimary: Colors.white,
-            secondary: Colors.green,
+            secondary: myColor,
             onSecondary: Colors.white,
             background: Colors.white,
             onBackground: Colors.black,

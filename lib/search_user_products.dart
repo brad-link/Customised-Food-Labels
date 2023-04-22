@@ -1,40 +1,40 @@
-import 'package:cfl_app/components/customAppBar.dart';
-import 'package:cfl_app/database.dart';
+import 'package:cfl_app/appUser.dart';
 import 'package:cfl_app/product.dart';
 import 'package:cfl_app/productCard.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:search_page/search_page.dart';
 
-import 'appUser.dart';
+import 'database.dart';
 
-class ProductSearch extends StatefulWidget {
+class SearchUserProducts extends StatelessWidget {
   final DateTime currentDate;
-  const ProductSearch({Key? key, required this.currentDate}) : super(key: key);
+  const SearchUserProducts({Key? key, required this.currentDate})
+      : super(key: key);
 
-  @override
-  State<ProductSearch> createState() => _ProductSearchState();
-}
 
-class _ProductSearchState extends State<ProductSearch> {
   @override
   Widget build(BuildContext context) {
+    List<Product> searchProducts;
     final user = Provider.of<AppUser?>(context);
     return Scaffold(
-      appBar: const CustomAppBar(
-        title: 'Search Saved Products',
-      ),
       body: StreamBuilder<List<Product>>(
         stream: DatabaseService(uid: user?.uid).getUsersSavedProducts(),
-        builder: (context, snapshot){
-          if(snapshot.hasData){
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
             List<Product> savedProducts = snapshot.data!;
+            searchProducts = snapshot.data!;
             return ListView.builder(
                 itemCount: savedProducts.length,
-                itemBuilder: (context, index){
-                  return ProductCard(product: savedProducts[index], date: widget.currentDate, viewButton: () {  },);
+                itemBuilder: (context, index) {
+                  return ProductCard(
+                    product: savedProducts[index],
+                    date: currentDate,
+                    viewButton: () {},
+                  );
                 });
-          } else{
+          } else {
             return const CircularProgressIndicator();
           }
         },
@@ -58,8 +58,8 @@ class _ProductSearchState extends State<ProductSearch> {
             ],
             builder: (product) => ProductCard(
               product: product!,
-              date: widget.currentDate,
-              viewButton: () {  },
+              date: currentDate,
+              viewButton: () {},
             ),
           ),
         ),

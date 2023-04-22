@@ -45,6 +45,9 @@ dependencies:
   intl: ^0.17.0
   search_page: ^2.3.0
   cached_network_image: ^3.2.3
+  camera: ^0.10.4
+  path_provider: ^2.0.14
+
 
 
 dev_dependencies:
