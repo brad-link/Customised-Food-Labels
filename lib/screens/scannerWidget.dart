@@ -21,7 +21,7 @@ import 'ScannedScreen2.dart';
 
 String scanBarcode = '';
 bool codeScanned = false;
-bool productExists = true;
+bool productExists = false;
 
 class Scanner extends StatefulWidget {
   final DateTime date;
@@ -66,6 +66,7 @@ class _ScannerState extends State<Scanner> {
     for(int i=0; i<savedProducts.length; i++) {
       if (barcodeScanRes == savedProducts[i].code) {
         Product product = savedProducts[i];
+        productExists = true;
         Navigator.push(context, MaterialPageRoute(builder: (context) =>
             ScannedScreen(
               product: product, date: widget.date!, goals: nutriGoals,)));
@@ -77,7 +78,7 @@ class _ScannerState extends State<Scanner> {
     final response = await http.get(Uri.parse(url));
 
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && productExists == false) {
       final jsonProduct = jsonDecode(response.body);
       if(jsonProduct['status'] == 1){
       Product product = Product.fromJson(jsonProduct);
@@ -119,20 +120,21 @@ class _ScannerState extends State<Scanner> {
             children: <Widget>[
               SizedBox(
                   height: 40,
-                  child: ElevatedButton(
+                  child: ElevatedButton.icon(
                       style: ElevatedButton.styleFrom(
                        // backgroundColor: Colors.green,
                       ),
                       onPressed: () async {
                         NutritionGoals? goals = await DatabaseService(uid: user?.uid).getNutritionGoals();
                         barcodeScan(goals);},
-                      child: const Text('Barcode Scan',
+                      icon: Icon(CupertinoIcons.barcode),
+                      label: const Text('Barcode Scan',
                           style: TextStyle(
                               fontSize: 17, fontWeight: FontWeight.bold))),
                 ),
              SizedBox(
                 height: 40,
-                child: ElevatedButton(
+                child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                      // backgroundColor: Colors.green,
                     ),
@@ -147,7 +149,8 @@ class _ScannerState extends State<Scanner> {
                               );
                             }
                           },
-                    child: const Text('Search Products',
+                    icon: Icon(Icons.search),
+                    label: const Text('Search Products',
                         style: TextStyle(
                             fontSize: 17, fontWeight: FontWeight.bold))),
               ),

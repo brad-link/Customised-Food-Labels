@@ -45,7 +45,7 @@ class SearchProductDB extends StatelessWidget {
           delegate: SearchPage<Product?>(
             onQueryUpdate: print,
             items: await DatabaseService().getSavedProductsFuture(),
-            searchLabel: 'Search saved products',
+            searchLabel: 'Search all products',
             suggestion: const Center(
               child: Text('Filter products by name'),
             ),

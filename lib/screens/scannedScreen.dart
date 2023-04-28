@@ -62,7 +62,8 @@ class _ScannedScreenState extends State<ScannedScreen> {
     numPortion = input;
     portionStreamController.sink.add(numPortion!);
   }
-  String? selectedPortion;
+
+  String? selectedPortion = '1g';
 
   @override
   Widget build(BuildContext context) {
@@ -71,14 +72,17 @@ class _ScannedScreenState extends State<ScannedScreen> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('Nutrition Information'),
-          centerTitle: false,
-          automaticallyImplyLeading: false,
+          centerTitle: true,
+          automaticallyImplyLeading: true,
           backgroundColor: myColor,
         ),
         body: Builder(builder: (BuildContext context) {
           Product product = widget.product;
           String serving = product.serve_size!;
+          print(product.serving_quantity);
+          String? productServing = 'serving $serving';
           String? image = product.image;
+          //String measurement = product.servingType ?? 'g';
           NutritionGoals? personalGoals = widget.goals;
           return SingleChildScrollView(
             child: Flex(
@@ -89,101 +93,74 @@ class _ScannedScreenState extends State<ScannedScreen> {
                   child: Flex(
                     direction: Axis.vertical,
                     children: [
-                      Text(product.productName!),
+                      Row(
+                        children: [
                       if (image != null)
+                        Padding(padding: EdgeInsets.fromLTRB(5, 5, 5, 5),
+                        child:
                         Image(
-                          image: CachedNetworkImageProvider(image),
-                        ),
-                      Row(
-                        children:[
-                      Expanded(child: const Text('Serving size: '),),
-                      Expanded(child: DropdownButtonFormField<String>(
-                        value: selectedPortion,
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            selectedPortion = newValue!;
-                            //checked = selectedPortion;
-                            //portion = double.parse(selectedPortion!);
-                            print(selectedPortion);
-                          });
-                        },
-                        items: <String>[
-                          '1g',
-                          '100g',
-                          //if(product.serving_quantity != null)
-                            //'serving($serving)',
-                        ].map<DropdownMenuItem<String>>((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                      ),
-                      ),
-                      ],
-                      ),
-                      /*
+                          image: CachedNetworkImageProvider(image,
+                          maxHeight: 120,
+                          maxWidth: 120),
+                        ),),
+          Text(product.productName!,
+            style: TextStyle(
+              color: myColor,
+              fontWeight: FontWeight.bold,
+                fontSize: 16,
+            ),),]),
                       Row(
                         children: [
                           Expanded(
-                            child: RadioListTile<String>(
-                              title: const Text('1g'),
-                              value: '1g',
-                              groupValue: checked,
-                              onChanged: (String? value) {
-                                setState(() {
-                                  portion = 1;
-                                  checked = value;
-                                });
-                              },
-                            ),
+                            child: const Text('Serving size: '),
                           ),
                           Expanded(
-                            child: RadioListTile<String>(
-                              title: const Text('100g'),
-                              value: '100g',
-                              groupValue: checked,
-                              onChanged: (String? value) {
+                            child: DropdownButtonFormField<String>(
+                              value: selectedPortion,
+                              onChanged: (String? newValue) {
                                 setState(() {
-                                  portion = 100;
-                                  checked = value;
+                                  selectedPortion = newValue!;
+                                  //checked = selectedPortion;
+                                  //portion = double.parse(selectedPortion!);
+                                  print(selectedPortion);
                                 });
                               },
+                              items: <String>[
+                                '1g',
+                                '100g',
+                                if(product.serving_quantity != null)
+                                productServing,
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
                             ),
                           ),
-                          if (product?.serving_quantity != null)
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: Text('serving($serving)'),
-                                value: 'serve',
-                                groupValue: checked,
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    portion = product?.serving_quantity;
-                                    checked = value;
-                                  });
-                                },
-                              ),
-                            ),
                         ],
-                      ),*/
+                      ),
                       Row(
                         children: [
-                      Expanded(child: const Text('Number of servings: '),),
-                      Expanded(child: TextField(
-                        controller: portionController,
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
-                          if (value.isEmpty) {
-                            portionStreamController.add(numPortion);
-                            print(selectedPortion);
-                          } else {
-                            portionStreamController.add(num.tryParse(value)!);
-                          }
-                        },
-                      ),
-          ),
-                      ],
+                          Expanded(
+                            child: const Text('Number of servings: '),
+                          ),
+                          Expanded(
+                            child: TextField(
+                              controller: portionController,
+                              keyboardType: TextInputType.number,
+                              onChanged: (value) {
+                                if (value.isEmpty) {
+                                  portionStreamController.add(numPortion);
+                                  print(selectedPortion);
+                                } else {
+                                  portionStreamController
+                                      .add(num.tryParse(value)!);
+                                }
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                       if (selectedPortion != null)
                         StreamBuilder<num>(
@@ -330,11 +307,16 @@ class _ScannedScreenState extends State<ScannedScreen> {
                                                             break;
                                                           }
                                                       }
-                                                      if(selectedPortion == '100g'){
+                                                      if (selectedPortion ==
+                                                          '100g' || selectedPortion == '100ml') {
                                                         portion = 100;
-                                                      } else if(selectedPortion == 'serving($serving)'){
-                                                        portion = product?.serving_quantity;
-                                                      } else if(selectedPortion == '1g'){
+                                                      } else if (selectedPortion ==
+                                                          productServing) {
+                                                        portion = product
+                                                            ?.serving_quantity;
+                                                        print(product?.serving_quantity);
+                                                      } else if (selectedPortion ==
+                                                          '1g' || selectedPortion == '1ml') {
                                                         portion = 1;
                                                       }
                                                       return ValueCard(
@@ -351,8 +333,7 @@ class _ScannedScreenState extends State<ScannedScreen> {
                                           ),
                                           ElevatedButton(
                                               style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      myColor),
+                                                  backgroundColor: myColor),
                                               onPressed: () async {
                                                 DietLog update = DietLog(
                                                   date: widget.date,
@@ -402,13 +383,28 @@ class _ScannedScreenState extends State<ScannedScreen> {
                                                     .updateLog(update);
                                                 Navigator.pop(context);
                                               },
-                                              child: const Text('Add to Diary')),
-                                          Padding(padding: EdgeInsets.all(5),
+                                              child:
+                                                  const Text('Add to Diary')),
+                                          Padding(
+                                            padding: EdgeInsets.all(5),
                                             child: TextButton(
-                                              child:const Text('incorrect data? update values'),
-                                      onPressed: () =>
-                                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => AddProduct(barcode: product.code!, product: product, currentDate: widget.date,))),
-                                            ),)
+                                              child: const Text(
+                                                  'incorrect data? update values'),
+                                              onPressed: () =>
+                                                  Navigator.pushReplacement(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              AddProduct(
+                                                                barcode: product
+                                                                    .code!,
+                                                                product:
+                                                                    product,
+                                                                currentDate:
+                                                                    widget.date,
+                                                              ))),
+                                            ),
+                                          )
                                         ]);
                                       } else {
                                         return const CircularProgressIndicator();

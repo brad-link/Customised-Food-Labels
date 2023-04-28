@@ -133,6 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
               return Scaffold(
                 appBar: CustomAppBar(
                   title: title,
+                  backButton: false,
                   calendar: IconButton(
                       onPressed: () => chooseDate(context, firstDate, date!, tracker),
                       icon: const Icon(Icons.calendar_today)),

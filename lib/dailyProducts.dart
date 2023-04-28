@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'components/nutritionGoals.dart';
+import 'main.dart';
 
 class DailyProducts extends StatefulWidget {
   final DateTime currentDate;
@@ -37,9 +38,24 @@ class _DailyProductsState extends State<DailyProducts> {
           List<Product> products = snapshot.data!;
           print(products);
           return Container(
+                //border: Border.all(color: Colors.black)),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const Text('Consumed Today'),
+                Container(
+                  decoration: BoxDecoration(
+                    color: myColor,
+                    borderRadius: BorderRadius.circular(5),),
+                  height: 34,
+                 width: 300,
+                 child: Center(child: Text('Consumed Today',
+                   textAlign: TextAlign.center,
+                   style: TextStyle(
+                     color: Colors.white,
+                     fontWeight: FontWeight.bold,
+                     fontSize: 20.0,
+                   ),),),
+                ),
             SizedBox(
               height: 200,
             child: ListView.builder(

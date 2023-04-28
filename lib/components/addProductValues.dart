@@ -27,6 +27,7 @@ class _AddProductValuesState extends State<AddProductValues> {
         //enabled: widget.isFilled,
         initialValue: widget.value, //!= null ? widget.value : null ,
         keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.next,
         decoration: InputDecoration(
           hintText: '$category',
         ),
@@ -37,6 +38,7 @@ class _AddProductValuesState extends State<AddProductValues> {
       return TextFormField(
         //enabled: widget.isFilled,
         initialValue: initialValue ,
+          textInputAction: TextInputAction.next,
         keyboardType: TextInputType.number,
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.digitsOnly

@@ -18,7 +18,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final Auth _auth = Auth();
-  final _formKey = GlobalKey<FormState>();
+  final signInformKey = GlobalKey<FormState>();
   String email = "";
   String password = '';
   String error = '';
@@ -46,6 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 30.0),
             child: Form(
+              key: signInformKey,
                 child: Column(
               children: [
                 Padding(
@@ -90,7 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       backgroundColor: Colors.green
                   ),
                   onPressed: () async{
-                    if(_formKey.currentState!.validate()){
+                    if(signInformKey.currentState!.validate()){
                       dynamic result = await _auth.signInWithEMailAndPassword(email, password);
                       if(result == null){
                         setState(() => error = 'invalid email or password');

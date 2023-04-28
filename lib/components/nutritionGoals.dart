@@ -22,16 +22,55 @@ class NutritionGoals{
     this.fibre = 30,
   });
 
-  NutritionGoals setBMR(UserData user){
-    num bmr = 10* user.weight! + 6.25*user.height!;
-    if(user.sex == 'male'){
+  num setBMR(UserData user){
+    num bmr = 10* user.weight! + 6.25*user.height! - (5* user.age!);
+    if(user.sex == 'Male'){
       bmr += 5;
     }
     else{
       bmr -= 161;
     }
-    return NutritionGoals(calories: bmr.toInt());
+    return bmr;
   }
+  NutritionGoals.setGoalsActivity(UserData user){
+    num bmr = setBMR(user);
+    if(user.activityLevel == 1){
+      calories = (1.1*bmr).toInt();
+    } else if(user.activityLevel == 2){
+      calories = (1.3*bmr).toInt();
+    }  else if(user.activityLevel == 3){
+      calories = (1.5*bmr).toInt();
+    } else if(user.activityLevel == 4){
+      calories = (1.7*bmr).toInt();
+    }
+  }
+
+  NutritionGoals.setGoals(UserData user){
+    num bmr = setBMR(user);
+    List<double> weightMultiplier = [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1];
+    int weightGoal = user.weightGoal!.toInt();
+    if(user.activityLevel == 1){
+      calories = (1.1*bmr).toInt();
+      print(calories);
+    } else if(user.activityLevel == 2){
+      calories = (1.3*bmr).toInt();
+      print(calories);
+    }  else if(user.activityLevel == 3){
+      calories = (1.5*bmr).toInt();
+    } else if(user.activityLevel == 4){
+      calories = (1.7*bmr).toInt();
+    }
+    calories = (calories! + (1000 * weightMultiplier[weightGoal - 1])).toInt();
+    carbohydrates = calories! * (user.carbPercentage!/100)~/4;
+    protein = (calories! * (user.proteinPercentage!/100)~/4);
+    fat = (calories! * (user.fatPercentage!/100)~/9);
+    saturates = (calories! * (8/100)~/9);
+    sugars = (calories! * (8/100)~/4);
+    fibre = ((calories!/1000)*14).toInt();
+  }
+
+
+
 
 
   factory NutritionGoals.fromFirestore(
@@ -47,7 +86,7 @@ class NutritionGoals{
       sugars: data?['sugars'],
       protein: data?['protein'],
       salt: data?['salt'],
-      //fibre: data?['fibre'],
+      fibre: data?['fibre'],
     );
   }
 
@@ -60,7 +99,7 @@ class NutritionGoals{
       if (sugars != null) "sugars": sugars,
       if (protein != null) "protein": protein,
       if (salt != null) "salt": salt,
-      //if (fibre != null) "fibre": fibre,
+      if (fibre != null) "fibre": fibre,
     };
   }
 }

@@ -64,7 +64,19 @@ class DatabaseService {
       print('Error getting MTL stream: $error');
     });
   }
+  Future updateUser(UserData user) async{
+    return await accountDetails.doc('personal details').set(user.toFirestore());
+  }
 
+  Future<UserData?> getUserData() async {
+    final Ref = accountDetails.doc('personal details').withConverter(
+      fromFirestore: UserData.fromFirestore,
+      toFirestore: (UserData values, _) => values.toFirestore(),
+    );
+    final docSnap = await Ref.get();
+
+    return docSnap.data();
+  }
   Future<TrafficValues?> getMTL() async {
     final mtlDocRef = accountDetails.doc('MTL').withConverter(
           fromFirestore: TrafficValues.fromFirestore,
@@ -121,7 +133,6 @@ class DatabaseService {
         .snapshots()
         .map((snapshot) => snapshot.docs
     .map((doc) => DietLog.fromFirestore(doc)).toList());
-        //.map(_foodTracker);
   }
   Future setNutritionGoals(NutritionGoals goals) async{
     return await accountDetails.doc('Nutrition goals').set(goals.toFirestore());

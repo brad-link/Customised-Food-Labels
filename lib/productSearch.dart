@@ -23,6 +23,7 @@ class _ProductSearchState extends State<ProductSearch> {
     return Scaffold(
       appBar: const CustomAppBar(
         title: 'Search Saved Products',
+        backButton: true,
       ),
       body: StreamBuilder<List<Product>>(
         stream: DatabaseService(uid: user?.uid).getUsersSavedProducts(),

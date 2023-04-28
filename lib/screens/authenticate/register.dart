@@ -23,9 +23,10 @@ class _RegisterState extends State<Register> {
       return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          automaticallyImplyLeading: false,
           title: const Text('Login'),
           centerTitle: false,
-          backgroundColor: Colors.green,
+          //backgroundColor: Colors.green,
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -35,7 +36,7 @@ class _RegisterState extends State<Register> {
               'Register',
               style: TextStyle(
                   fontSize: 35,
-                  color: Colors.green,
+                  //color: Colors.green,
                   fontWeight: FontWeight.bold
               ),
             ),
@@ -82,7 +83,7 @@ class _RegisterState extends State<Register> {
                   SizedBox(height: 30),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green
+                        //backgroundColor: Colors.green
                     ),
                     onPressed: () async {
                       if(_formKey.currentState!.validate()){

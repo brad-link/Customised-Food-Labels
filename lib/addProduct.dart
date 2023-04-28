@@ -28,7 +28,9 @@ class _AddProductState extends State<AddProduct> {
     product.code = widget.barcode;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: const CustomAppBar(
+        backButton: true,
         title: 'Add Product',
       ),
       body: Builder(builder: (BuildContext context) {

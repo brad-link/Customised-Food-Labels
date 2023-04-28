@@ -26,6 +26,7 @@ class Product {
   String? serve_size;
   String? quantity;
   num? serving_quantity;
+  String? servingType;
   String? image;
   num? portion;
   num? numOfPortions;
@@ -62,6 +63,7 @@ class Product {
     this.numOfPortions,
     this.dateAdded,
     this.timeAdded,
+    this.servingType,
     this.productID,
   });
 
@@ -99,7 +101,16 @@ class Product {
 
   factory Product.fromJson(final json) {
     var serving = json["product"]["serving_quantity"];
+    //var type = json["product"]["nutriscore_data"]['is_beverage'];
+    String? productType;
     num? serveSize;
+    /*if(type == 1){
+      productType = 'ml';
+    } else if(type == 0){
+      productType = 'g';
+    } else if(type == null){
+
+    }*/
     if (serving is String) {
       serveSize = num.parse(serving);
     } else {
@@ -127,6 +138,7 @@ class Product {
       serve_size: json["product"]["serving_size"].toString(),
       quantity: json["product"]["quantity"].toString(),
       serving_quantity: serveSize,
+      servingType: productType,
       image: json['product']["image_front_thumb_url"],
     );
   }

@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 import '../appUser.dart';
+import '../main.dart';
 
 
 
@@ -53,12 +54,21 @@ class NutritionWidget extends StatelessWidget {
                       ),
                     SizedBox( width: 40,
                       child: Text('Total',
+                          style: TextStyle(
+                          color: myColor
+                      ),
                         textAlign: TextAlign.center,),),
                     SizedBox( width: 40,
                       child: Text('Target',
+                        style: TextStyle(
+                            color: myColor
+                        ),
                         textAlign: TextAlign.center,),),
                     SizedBox( width: 40,
                       child: Text('Left',
+                        style: TextStyle(
+                            color: myColor
+                        ),
                         textAlign: TextAlign.center,),),
                   ],
                 ),

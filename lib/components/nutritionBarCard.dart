@@ -1,3 +1,4 @@
+import 'package:cfl_app/main.dart';
 import 'package:flutter/material.dart';
 
 class NutritionBarCard extends StatelessWidget {
@@ -31,15 +32,28 @@ class NutritionBarCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             SizedBox(width: 150,
-            child: Text(category),),
+            child: Text(category,
+            style: TextStyle(
+              color: myColor
+            ),),),
             SizedBox( width: 40,
             child: Text('$value',
-              textAlign: TextAlign.center,),),
+              textAlign: TextAlign.center,
+                style: TextStyle(
+                color: myColor
+            ))
+              ,),
             SizedBox( width: 40,
               child: Text('$limit',
+                style: TextStyle(
+                    color: myColor
+                ),
                 textAlign: TextAlign.center,),),
             SizedBox( width: 40,
               child: Text(remaining,
+                style: TextStyle(
+                    color: myColor
+                ),
                 textAlign: TextAlign.center,),),
           ],
         ),

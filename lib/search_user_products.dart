@@ -40,7 +40,7 @@ class SearchUserProducts extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        tooltip: 'Search saved Products',
+        tooltip: 'Search My Products',
         onPressed: () async => showSearch<Product?>(
           context: context,
           delegate: SearchPage<Product?>(

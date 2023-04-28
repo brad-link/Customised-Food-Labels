@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cfl_app/main.dart';
 import 'package:cfl_app/product.dart';
 import 'package:cfl_app/screens/scannedScreen.dart';
 import 'package:flutter/material.dart';
@@ -55,26 +56,30 @@ class ProductCardClick extends StatelessWidget {
                     width: 75.0,
                     height: 75.0,
                   ),
-                Column(
+                Center(
+               child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(product.productName!),
-                    Text('Portion size: $portion'),
-                    Text('Number of portions: $numPortions')
+                    Text(product.productName!,
+                    style: TextStyle(color: myColor),),
+                    Text('Portion size: $portion g',
+                      style: TextStyle(color: myColor),),
+                    Text('Number of portions: $numPortions',
+                      style: TextStyle(color: myColor),)
                   ],
                 ),
-                ElevatedButton(onPressed: () async{
+                ),
+                IconButton(
+                    icon:const Icon(Icons.delete),
+                    color: Colors.red,
+                    onPressed: () async{
                   CrossAxisAlignment.end;
                   removeButton;
                   product.setServingMacros(product);
                   await DatabaseService(uid: user?.uid).removeProductFromDay(product, date);
                 },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      shape: const CircleBorder(),
-                    ),
-                    child: const Text('-'))
+                ),
               ],
             ),
           ],

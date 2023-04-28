@@ -1,3 +1,4 @@
+import 'package:cfl_app/main.dart';
 import 'package:cfl_app/traffic_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,18 +36,23 @@ class TrafficCard2 extends StatelessWidget {
       onTap: () {
         nutritionSettings();
       },
-      child: Container(
+      child:
+      Padding(padding: EdgeInsets.all(5),
+      child:Container(
         decoration: BoxDecoration(
-            //borderRadius: BorderRadius.circular(20),
+          color: myColor,
+            borderRadius: BorderRadius.circular(5),
             border: Border.all(color: Colors.black)),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.all(1.0),
+              padding: EdgeInsets.all(3.0),
               child: Text(
+                textAlign: TextAlign.center,
                 '$category values per 100g',
                 style: TextStyle(
+                  color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 16.0,
                 ),
@@ -54,18 +60,25 @@ class TrafficCard2 extends StatelessWidget {
             ),
             //Divider(),
             Padding(
-              padding: EdgeInsets.all(1.0),
+              padding: EdgeInsets.all(3.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
+                    child: Padding(
+                padding: EdgeInsets.all(2) ,
                     child: Container(
-                      color: Colors.green,
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.black)),
+
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             'Green: \n$greenValue',
+                            textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -74,41 +87,59 @@ class TrafficCard2 extends StatelessWidget {
                         ],
                       ),
                     ),
+                    ),
                   ),
                   /*SizedBox(
                     width: 16.0,
                   ),*/
                   Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(3.0),
                     child: Container(
-                      color: Colors.amber,
+                      decoration: BoxDecoration(
+                          //color: myColor,
+                          color: Colors.amber,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.black)),
+
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             'Amber: \n$amberValue',
                             style: TextStyle(
-
+                              color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
                     ),
+                    ),
                   ),
                   Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(3.0),
                     child: Container(
-                      color: Colors.red,
+                      decoration: BoxDecoration(
+                          //color: myColor,
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(color: Colors.black)),
+                      //color: Colors.red,
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             'Red: \n>$amberValue',
                             style: TextStyle(
+                              color: Colors.white,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
+                    ),
                     ),
                   ),
                 ],
@@ -116,6 +147,7 @@ class TrafficCard2 extends StatelessWidget {
             ),
           ],
         ),
+      ),
       ),
     );
   }
