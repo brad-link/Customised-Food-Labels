@@ -1,13 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cfl_app/components/nutritionGoals.dart';
+import 'package:cfl_app/DataClasses/nutritionGoals.dart';
 import 'package:cfl_app/database.dart';
-import 'package:cfl_app/product.dart';
+import 'package:cfl_app/DataClasses/product.dart';
 import 'package:cfl_app/screens/scannedScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'appUser.dart';
+import 'DataClasses/appUser.dart';
 
 class ProductCard extends StatelessWidget {
   final DateTime date;

@@ -1,12 +1,11 @@
-import 'package:cfl_app/TrafficValues.dart';
-import 'package:cfl_app/traffic_card.dart';
+import 'package:cfl_app/DataClasses/TrafficValues.dart';
 import 'package:cfl_app/traffic_card2.dart';
 import 'package:cfl_app/userData.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'appUser.dart';
+import 'DataClasses/appUser.dart';
 import 'database.dart';
 
 class TrafficSettings extends StatelessWidget {

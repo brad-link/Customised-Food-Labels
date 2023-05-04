@@ -1,9 +1,9 @@
+import 'package:cfl_app/main.dart';
 import 'package:cfl_app/screens/account_setup.dart';
-import 'package:cfl_app/screens/home/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../auth.dart';
+import '../../components/auth.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -23,21 +23,21 @@ class _RegisterState extends State<Register> {
       return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: const Text('Login'),
-          centerTitle: false,
-          //backgroundColor: Colors.green,
+          title: const Text('Register'),
+          centerTitle: true,
         ),
-        body: Column(
+        body: SingleChildScrollView(
+          child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
+            const SizedBox(height: 100),
+            const Text(
               'Register',
               style: TextStyle(
                   fontSize: 35,
-                  //color: Colors.green,
-                  fontWeight: FontWeight.bold
+                  fontWeight: FontWeight.bold,
+                color: myColor,
               ),
             ),
             Padding(
@@ -50,7 +50,7 @@ class _RegisterState extends State<Register> {
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: TextFormField(
                       keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Email',
                         hintText: 'Enter email',
                         prefixIcon: Icon(Icons.email),
@@ -62,12 +62,12 @@ class _RegisterState extends State<Register> {
                         validator: (value) => value!.isEmpty ? "Enter an email" : null
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: TextFormField(
                       keyboardType: TextInputType.visiblePassword,
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         labelText: 'Password',
                         hintText: 'Enter password',
                         prefixIcon: Icon(Icons.password),
@@ -80,7 +80,7 @@ class _RegisterState extends State<Register> {
                         validator: (value) => value!.length < 6 ? "Enter a password 6+ chars long" : null
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         //backgroundColor: Colors.green
@@ -91,28 +91,30 @@ class _RegisterState extends State<Register> {
                         if(result == null){
                           setState(() => error = 'invalid email address');
                         } else {
+                          if(!mounted) return;
                           Navigator.of(
-                            context).pushReplacement(MaterialPageRoute(builder: (context) =>
+                            context).push(MaterialPageRoute(builder: (context) =>
                                 const SetupForm()),
                           );
                         }
 
                       }
                     },
-                    child: Text(
+                    child: const Text(
                         'Register'
                     ),
 
                   ),
-                  SizedBox(height: 12.0),
+                  const SizedBox(height: 12.0),
                   Text(
                     error,
-                    style: TextStyle(color: Colors.red, fontSize: 12.0),
+                    style: const TextStyle(color: Colors.red, fontSize: 12.0),
                   )
                 ],
               )),
             )
           ],
+        ),
         ),
       );
     }

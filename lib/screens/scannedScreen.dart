@@ -1,23 +1,18 @@
 import 'dart:async';
-import 'dart:convert';
-
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cfl_app/components/customCheckBox.dart';
-import 'package:cfl_app/components/dietLog.dart';
-import 'package:cfl_app/components/nutritionGoals.dart';
+import 'package:cfl_app/DataClasses/dietLog.dart';
+import 'package:cfl_app/DataClasses/nutritionGoals.dart';
 import 'package:cfl_app/database.dart';
-import 'package:cfl_app/product.dart';
+import 'package:cfl_app/DataClasses/product.dart';
 import 'package:cfl_app/valueCard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-import '../TrafficValues.dart';
+import '../DataClasses/TrafficValues.dart';
 import '../addProduct.dart';
-import '../appUser.dart';
+import '../DataClasses/appUser.dart';
 import '../main.dart';
 
 class ScannedScreen extends StatefulWidget {
@@ -35,7 +30,6 @@ class ScannedScreen extends StatefulWidget {
 class _ScannedScreenState extends State<ScannedScreen> {
   final portionController = TextEditingController();
   final portionStreamController = StreamController<num>();
-  //final Stream<num?> portionstream = portionStreamController.stream;
   bool servingChecked = true;
   bool gramsChecked = false;
   String? checked;
@@ -56,13 +50,6 @@ class _ScannedScreenState extends State<ScannedScreen> {
     portionStreamController.close();
     super.dispose();
   }
-
-  void _setPortions() {
-    num input = num.tryParse(portionController.text)!;
-    numPortion = input;
-    portionStreamController.sink.add(numPortion!);
-  }
-
   String? selectedPortion = '1g';
 
   @override

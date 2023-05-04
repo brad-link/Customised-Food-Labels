@@ -1,6 +1,6 @@
-import 'package:cfl_app/appUser.dart';
-import 'package:cfl_app/product.dart';
-import 'package:cfl_app/productCard.dart';
+import 'package:cfl_app/DataClasses/appUser.dart';
+import 'package:cfl_app/clickable_product_card.dart';
+import 'package:cfl_app/DataClasses/product.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,9 +28,11 @@ class SearchUserProducts extends StatelessWidget {
             return ListView.builder(
                 itemCount: savedProducts.length,
                 itemBuilder: (context, index) {
-                  return ProductCard(
+                  return ClickableProductCard(
                     product: savedProducts[index],
                     date: currentDate,
+                    section: 'search',
+                    button: (){},
                     viewButton: () {},
                   );
                 });
@@ -56,9 +58,11 @@ class SearchUserProducts extends StatelessWidget {
             filter: (product) => [
               product?.productName,
             ],
-            builder: (product) => ProductCard(
+            builder: (product) => ClickableProductCard(
               product: product!,
               date: currentDate,
+              section: 'search',
+              button: (){},
               viewButton: () {},
             ),
           ),

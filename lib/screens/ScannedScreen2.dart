@@ -1,71 +1,68 @@
-import 'dart:async';
-import 'dart:convert';
-
-import 'package:cfl_app/components/customCheckBox.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cfl_app/components/add_product_to_db.dart';
+import 'package:cfl_app/DataClasses/dietLog.dart';
+import 'package:cfl_app/DataClasses/nutritionGoals.dart';
 import 'package:cfl_app/database.dart';
-import 'package:cfl_app/product.dart';
+import 'package:cfl_app/DataClasses/product.dart';
 import 'package:cfl_app/valueCard.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import '../DataClasses/TrafficValues.dart';
+import '../addProduct.dart';
+import '../DataClasses/appUser.dart';
+import '../main.dart';
 
-import '../TrafficValues.dart';
-import '../appUser.dart';
-/*
-class ScannedScreen extends StatefulWidget {
+class ScannedScreen2 extends StatefulWidget {
   final Product product;
-  const ScannedScreen({Key? key, required this.product}) : super(key: key);
+  final DateTime date;
+  final NutritionGoals? goals;
+  const ScannedScreen2(
+      {Key? key, required this.product, required this.date, this.goals})
+      : super(key: key);
 
   @override
-  State<ScannedScreen> createState() => _ScannedScreenState();
+  State<ScannedScreen2> createState() => _ScannedScreen2State();
 }
 
-class _ScannedScreenState extends State<ScannedScreen> {
-  final portionController = TextEditingController(text: '1');
-  final portionStreamController = StreamController<num>();
-  //final Stream<num?> portionstream = portionStreamController.stream;
+class _ScannedScreen2State extends State<ScannedScreen2> {
   bool servingChecked = true;
   bool gramsChecked = false;
   String? checked;
   num? portion;
-  num numPortion = 1;
+  num portions = 1;
+  String? measurement;
+  String? oneGramorMl;
+  String? hundredGramOrMl;
+  String? selectedPortion = '1g';
 
   @override
   void initState() {
     super.initState();
-    portionController.addListener(_setPortions);
-  }
-
-  @override
-  void dispose() {
-    portionController.dispose();
-    portionStreamController.close();
-    super.dispose();
-  }
-
-  void _setPortions() {
-    num input = num.tryParse(portionController.text)!;
-    numPortion = input;
-    portionStreamController.sink.add(numPortion!);
+    measurement = widget.product.servingType ?? 'g';
+    oneGramorMl = '1$measurement';
+    hundredGramOrMl = '100$measurement';
+    selectedPortion = oneGramorMl;
   }
 
   @override
   Widget build(BuildContext context) {
     AppUser? user = Provider.of<AppUser?>(context, listen: false);
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text('Nutrition Information'),
-          centerTitle: false,
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.green,
+          centerTitle: true,
+          automaticallyImplyLeading: true,
+          backgroundColor: myColor,
         ),
         body: Builder(builder: (BuildContext context) {
           Product product = widget.product;
           String serving = product.serve_size!;
-          return Container(
-            alignment: Alignment.center,
+          String? productServing = 'serving $serving';
+          String? image = product.image;
+          NutritionGoals? personalGoals = widget.goals;
+          return SingleChildScrollView(
             child: Flex(
               direction: Axis.vertical,
               children: <Widget>[
@@ -73,292 +70,257 @@ class _ScannedScreenState extends State<ScannedScreen> {
                   alignment: Alignment.center,
                   child: Flex(
                     direction: Axis.vertical,
-                    children: <Widget>[
-                      Text(product!.productName),
-                      Image.network(product.image),
-                      const Text('Serving size: '),
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                        if (image != null)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
+                            child: Image(
+                              image: CachedNetworkImageProvider(image,
+                                  maxHeight: 120, maxWidth: 120),
+                            ),
+                          ),
+                        Center(
+                        child: Text('Product name: \n${product.productName!} ',
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            //color: myColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        ),
+                      ]),
                       Row(
                         children: [
-                          /*Expanded(
-                            child: DropdownButton<String>(
-                                value: checked,
-                                items: <DropdownMenuItem<String>>[
-                                  DropdownMenuItem(
-                                    value: '1g',
-                                    child: Expanded(
-                                      child: RadioListTile<String>(
-                                        title: const Text('per 1g'),
-                                        value: '1g',
-                                        groupValue: checked,
-                                        onChanged: (String? value) {
-                                          setState(() {
-                                            checked = value;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  DropdownMenuItem(
-                                    value: '100g',
-                                    child: Expanded(
-                                      child: RadioListTile<String>(
-                                        title: const Text('per 100g'),
-                                        value: '100g',
-                                        groupValue: checked,
-                                        onChanged: (String? value) {
-                                          setState(() {
-                                            checked = value;
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  if (product?.serving_quantity != null)
-                                    DropdownMenuItem(
-                                      value: 'serve',
-                                      child: Expanded(
-                                        child: RadioListTile<String>(
-                                          title: Text('per serving ($serving)'),
-                                          value: 'serve',
-                                          groupValue: checked,
-                                          onChanged: (String? value) {
-                                            setState(() {
-                                              checked = value;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                ],
-                                onChanged: (value) {
-                                  checked = value!;
-                                }),
-                          )*/
+                          const Expanded(
+                            child: Text('Serving size: '),
+                          ),
                           Expanded(
-                            child: RadioListTile<String>(
-                              title: const Text('1g'),
-                              value: '1g',
-                              groupValue: checked,
-                              onChanged: (String? value) {
+                            child: DropdownButtonFormField<String>(
+                              value: selectedPortion,
+                              onChanged: (String? newValue) {
                                 setState(() {
-                                  portion = 1;
-                                  checked = value;
+                                  selectedPortion = newValue!;
+                                  //checked = selectedPortion;
+                                  //portion = double.parse(selectedPortion!);
+                                  print(selectedPortion);
+                                });
+                              },
+                              items: <String?>[
+                                oneGramorMl,
+                                hundredGramOrMl,
+                                if (product.serving_quantity != null)
+                                  productServing,
+                              ].map<DropdownMenuItem<String>>((String? value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value!),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(
+                            child: Text('Number of servings: '),
+                          ),
+                          Expanded(
+                            child: TextField(
+                              //controller: portionController,
+                              keyboardType: TextInputType.number,
+                              onChanged: (value) {
+                                setState(() {
+                                  if (value.isEmpty) {
+                                    portions = 1;
+                                  } else {
+                                    portions = num.tryParse(value)!;
+                                  }
                                 });
                               },
                             ),
                           ),
-                          Expanded(
-                            child: RadioListTile<String>(
-                              title: const Text('100g'),
-                              value: '100g',
-                              groupValue: checked,
-                              onChanged: (String? value) {
-                                setState(() {
-                                  portion = 100;
-                                  checked = value;
-                                });
-                              },
-                            ),
-                          ),
-                          if (product?.serving_quantity != null)
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: Text('serving($serving)'),
-                                value: 'serve',
-                                groupValue: checked,
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    portion = product?.serving_quantity;
-                                    checked = value;
-                                  });
-                                },
-                              ),
-                            ),
                         ],
                       ),
-                      const Text('Number of servings: '),
-                      TextFormField(
-                        controller: portionController,
-                        keyboardType: TextInputType.number,
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly
-                        ],
-                        //validator: (value) =>value!.isEmpty ? "enter your weight" : null,
-                        //onChanged: _setPortions;
-                      ),
-                      if (checked != null)
-                        StreamBuilder<num>(
-                            stream: portionStreamController.stream,
-                            builder: (context, snapshot){
-                              if (snapshot.hasData) {
-                                num? portions = snapshot.data;
-                                StreamBuilder<TrafficValues?>(
-                                    stream: DatabaseService(uid: user?.uid)
-                                        .getMTLStream(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.hasData) {
-                                        //num? portions = snapshot?.data;
-                                        TrafficValues? mtlValues =
-                                            snapshot.data;
-                                        //TrafficValues? mtlValues =  await DatabaseService(uid: user?.uid).getMTL();
-                                        //snapshot?.data;
-                                        return Column(children: [
-                                          ListView.builder(
-                                              shrinkWrap: true,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              itemCount: 4,
-                                              itemBuilder: (context, index) {
-                                                num? serving;
-                                                String? category;
-                                                num? size;
-                                                num? greenValue;
-                                                num? amberValue;
-                                                num? intake;
-                                                switch (index) {
-                                                  case 0:
-                                                    {
-                                                      //serving = portion;
-                                                      category = 'Fat';
-                                                      size = product?.fat_100g;
-                                                      greenValue =
-                                                          mtlValues?.fatGreen;
-                                                      amberValue =
-                                                          mtlValues?.fatAmber;
-                                                      intake = 70;
-                                                      break;
-                                                    }
-                                                  case 1:
-                                                    {
-                                                      //serving = 100;
-                                                      category = 'Saturates';
-                                                      size =
-                                                          product?.sat_fat100g;
-                                                      greenValue = mtlValues
-                                                          ?.satFatGreen;
-                                                      amberValue = mtlValues
-                                                          ?.satFatAmber;
-                                                      intake = 20;
-                                                      break;
-                                                    }
-                                                  case 2:
-                                                    {
-                                                      //serving = 100;
-                                                      category = 'Sugars';
-                                                      size =
-                                                          product?.sugar_100g;
-                                                      greenValue =
-                                                          mtlValues?.sugarGreen;
-                                                      amberValue =
-                                                          mtlValues?.sugarAmber;
-                                                      intake = 90;
-                                                      break;
-                                                    }
-                                                  case 3:
-                                                    {
-                                                      //serving = 100;
-                                                      category = 'Salt';
-                                                      size = product?.salt_100g;
-                                                      greenValue =
-                                                          mtlValues?.saltGreen;
-                                                      amberValue =
-                                                          mtlValues?.saltAmber;
-                                                      intake = 70;
-                                                      break;
-                                                    }
-                                                }
-                                                return ValueCard(
-                                                  serving: portion,
-                                                  category: category,
-                                                  size: size,
-                                                  greenValue: greenValue,
-                                                  amberValue: amberValue,
-                                                  intake: intake,
-                                                  multiplier: numPortion,
-                                                );
-                                              }),
-                                        ]);
-                                      } else {
-                                        return const CircularProgressIndicator();
-                                      }
-                                    });
-                              } else{
-                                return const CircularProgressIndicator();
-                              }
-                            })
-                      /* if (checked == 'serve')
-                        FutureBuilder<TrafficValues?>(
-                            future: DatabaseService(uid: user?.uid).getMTL(),
+                      if (selectedPortion != null)
+                        StreamBuilder<TrafficValues?>(
+                            stream:
+                                DatabaseService(uid: user?.uid).getMTLStream(),
                             builder: (context, snapshot) {
                               if (snapshot.hasData) {
-                                TrafficValues? mtlValues = snapshot?.data;
-                                return ListView.builder(
-                                    shrinkWrap: true,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    itemCount: 4,
-                                    itemBuilder: (context, index) {
-                                      num? serving;
-                                      String? category;
-                                      num? size;
-                                      num? greenValue;
-                                      num? amberValue;
-                                      num? intake;
-                                      switch (index) {
-                                        case 0:
-                                          {
-                                            serving = product?.serving_quantity;
-                                            category = 'Fat';
-                                            size = product?.fat;
-                                            greenValue = mtlValues?.fatGreen;
-                                            amberValue = mtlValues?.fatAmber;
-                                            intake = 70;
-                                            break;
-                                          }
-                                        case 1:
-                                          {
-                                            serving = product?.serving_quantity;
-                                            category = 'Saturates';
-                                            size = product?.sat_fat;
-                                            greenValue = mtlValues?.satFatGreen;
-                                            amberValue = mtlValues?.satFatAmber;
-                                            intake = 20;
-                                            break;
-                                          }
-                                        case 2:
-                                          {
-                                            serving = product?.serving_quantity;
-                                            category = 'Sugars';
-                                            size = product?.sugar;
-                                            greenValue = mtlValues?.sugarGreen;
-                                            amberValue = mtlValues?.sugarAmber;
-                                            intake = 90;
-                                            break;
-                                          }
-                                        case 3:
-                                          {
-                                            serving = product?.serving_quantity;
-                                            category = 'Salt';
-                                            size = product?.salt;
-                                            greenValue = mtlValues?.saltGreen;
-                                            amberValue = mtlValues?.saltAmber;
-                                            intake = 70;
-                                            break;
-                                          }
-                                      }
-                                      return ValueCard(
-                                        serving: serving,
-                                        category: category,
-                                        size: size,
-                                        greenValue: greenValue,
-                                        amberValue: amberValue,
-                                        intake: intake,
-                                      );
-                                    });
+                                TrafficValues? mtlValues = snapshot.data;
+                                return Column(children: [
+                                  SizedBox(
+                                    height: 200,
+                                    child:
+                                        //Expanded(child:
+                                        ListView.builder(
+                                            shrinkWrap: true,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            itemCount: 8,
+                                            itemBuilder: (context, index) {
+                                              String? category;
+                                              num? size;
+                                              num? greenValue;
+                                              num? amberValue;
+                                              num? intake;
+                                              switch (index) {
+                                                case 0:
+                                                  {
+                                                    category = 'Calories';
+                                                    size =
+                                                        product?.calories_100g;
+                                                    greenValue = null;
+                                                    amberValue = null;
+                                                    intake =
+                                                        personalGoals?.calories;
+                                                    break;
+                                                  }
+                                                case 1:
+                                                  {
+                                                    category = 'Fat';
+                                                    size = product?.fat_100g;
+                                                    greenValue =
+                                                        mtlValues?.fatGreen;
+                                                    amberValue =
+                                                        mtlValues?.fatAmber;
+                                                    intake = personalGoals?.fat;
+                                                    break;
+                                                  }
+                                                case 2:
+                                                  {
+                                                    category = 'Saturates';
+                                                    size = product?.sat_fat100g;
+                                                    greenValue =
+                                                        mtlValues?.satFatGreen;
+                                                    amberValue =
+                                                        mtlValues?.satFatAmber;
+                                                    intake = personalGoals
+                                                        ?.saturates;
+                                                    break;
+                                                  }
+                                                case 3:
+                                                  {
+                                                    category = 'Carbohydrates';
+                                                    size = product?.carbs_100g;
+                                                    greenValue = null;
+                                                    amberValue = null;
+                                                    intake = personalGoals
+                                                        ?.carbohydrates;
+                                                    break;
+                                                  }
+                                                case 4:
+                                                  {
+                                                    category = 'Sugars';
+                                                    size = product?.sugar_100g;
+                                                    greenValue =
+                                                        mtlValues?.sugarGreen;
+                                                    amberValue =
+                                                        mtlValues?.sugarAmber;
+                                                    intake =
+                                                        personalGoals?.sugars;
+                                                    break;
+                                                  }
+                                                case 5:
+                                                  {
+                                                    category = 'Protein';
+                                                    size =
+                                                        product?.protein_100g;
+                                                    greenValue = null;
+                                                    amberValue = null;
+                                                    intake =
+                                                        personalGoals?.protein;
+                                                    break;
+                                                  }
+                                                case 6:
+                                                  {
+                                                    category = 'Salt';
+                                                    size = product?.salt_100g;
+                                                    greenValue =
+                                                        mtlValues?.saltGreen;
+                                                    amberValue =
+                                                        mtlValues?.saltAmber;
+                                                    intake =
+                                                        personalGoals?.salt;
+                                                    break;
+                                                  }
+                                                case 7:
+                                                  {
+                                                    category = 'Fibre';
+                                                    size = product?.fibre_100g;
+                                                    greenValue = null;
+                                                    amberValue = null;
+                                                    intake =
+                                                        personalGoals?.fibre;
+                                                    break;
+                                                  }
+                                              }
+                                              if (selectedPortion ==
+                                                  '100$measurement' /*|| selectedPortion == '100ml'*/) {
+                                                portion = 100;
+                                              } else if (selectedPortion ==
+                                                  productServing) {
+                                                portion =
+                                                    product?.serving_quantity;
+                                                print(
+                                                    product?.serving_quantity);
+                                              } else if (selectedPortion ==
+                                                  '1$measurement' /*|| selectedPortion == '1ml'*/) {
+                                                portion = 1;
+                                              }
+                                              return ValueCard(
+                                                serving: portion,
+                                                category: category,
+                                                size: size,
+                                                greenValue: greenValue,
+                                                amberValue: amberValue,
+                                                intake: intake,
+                                                multiplier: portions,
+                                              );
+                                            }),
+                                    //),
+                                  ),
+                                  ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: myColor),
+                                      onPressed: () async {
+                                        AddProductToDB addToDB =
+                                            AddProductToDB();
+                                        product.setServingMacros(product);
+                                        //await DatabaseService(uid: user?.uid).
+                                        addToDB.add(user!, widget.date, product,
+                                            portion, portions);
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Add to Diary')),
+                                  Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: TextButton(
+                                      child: const Text(
+                                          'incorrect data? update values'),
+                                      onPressed: () =>
+                                          Navigator.pushReplacement(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      AddProduct(
+                                                        barcode: product.code!,
+                                                        product: product,
+                                                        currentDate:
+                                                            widget.date,
+                                                      ))),
+                                    ),
+                                  )
+                                ]);
                               } else {
                                 return const CircularProgressIndicator();
                               }
-                            }),*/
+                            })
                     ],
                   ),
                 ),
@@ -368,5 +330,3 @@ class _ScannedScreenState extends State<ScannedScreen> {
         }));
   }
 }
-
- */

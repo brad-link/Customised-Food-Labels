@@ -1,14 +1,14 @@
-import 'package:cfl_app/appUser.dart';
+import 'package:cfl_app/DataClasses/appUser.dart';
+import 'package:cfl_app/clickable_product_card.dart';
 import 'package:cfl_app/database.dart';
-import 'package:cfl_app/product.dart';
+import 'package:cfl_app/DataClasses/product.dart';
 import 'package:cfl_app/productCard.dart';
-import 'package:cfl_app/productCardClick.dart';
-import 'package:cfl_app/screens/scannedScreen.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'components/nutritionGoals.dart';
+import 'DataClasses/nutritionGoals.dart';
 import 'main.dart';
 
 class DailyProducts extends StatefulWidget {
@@ -30,13 +30,12 @@ class _DailyProductsState extends State<DailyProducts> {
             return Text('Error: ${snapshot.error}');
           }
           if (!snapshot.hasData) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           }
           if(snapshot.hasData){
           List<Product> products = snapshot.data!;
-          print(products);
           return Container(
                 //border: Border.all(color: Colors.black)),
             child: Column(
@@ -48,7 +47,7 @@ class _DailyProductsState extends State<DailyProducts> {
                     borderRadius: BorderRadius.circular(5),),
                   height: 34,
                  width: 300,
-                 child: Center(child: Text('Consumed Today',
+                 child: const Center(child: Text('Products Consumed',
                    textAlign: TextAlign.center,
                    style: TextStyle(
                      color: Colors.white,
@@ -61,14 +60,9 @@ class _DailyProductsState extends State<DailyProducts> {
             child: ListView.builder(
             itemCount: products.length,
               itemBuilder: (context, index){
-                return
-                  //GestureDetector(
-                    //onTap: () async {
-                     // print(products[index].productName);
-                      //child:
-                      ProductCardClick(product: products[index],
+                return ClickableProductCard(product: products[index],
                         date: widget.currentDate,
-                        viewButton: () {}, removeButton: () {},);
+                        viewButton: () {}, button: () {}, section: 'daily',);
                    // }
                // );
               }),
@@ -77,7 +71,7 @@ class _DailyProductsState extends State<DailyProducts> {
             ),
           );
           } else{
-            return Container();
+            return const CircularProgressIndicator();
           }
         });
   }

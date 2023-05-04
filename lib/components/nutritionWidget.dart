@@ -1,11 +1,11 @@
-import 'package:cfl_app/components/dietLog.dart';
+import 'package:cfl_app/DataClasses/dietLog.dart';
 import 'package:cfl_app/components/nutritionBarCard.dart';
-import 'package:cfl_app/components/nutritionGoals.dart';
+import 'package:cfl_app/DataClasses/nutritionGoals.dart';
 import 'package:cfl_app/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
-import '../appUser.dart';
+import '../DataClasses/appUser.dart';
 import '../main.dart';
 
 
@@ -23,7 +23,7 @@ class NutritionWidget extends StatelessWidget {
           if(snapshot.hasData) {
             NutritionGoals? goals = snapshot.data;
             List<int?> target = [goals?.calories, goals?.fat, goals?.saturates, goals?.carbohydrates,
-              goals?.sugars, goals?.protein, goals?.salt];
+              goals?.sugars, goals?.protein, goals?.salt, goals?.fibre];
             List<String> categories = [
               'calories',
               'fat',
@@ -32,9 +32,9 @@ class NutritionWidget extends StatelessWidget {
               'sugars',
               'protein',
               'salt',
-              //'fibre'
+              'fibre'
             ];
-            List<int?> values = [
+            List<num?> values = [
               input?.calories,
               input?.fat,
               input?.saturates,
@@ -42,14 +42,14 @@ class NutritionWidget extends StatelessWidget {
               input?.sugars,
               input?.protein,
               input?.salt,
-              //input?.fibre
+              input?.fibre
             ];
             final user = Provider.of<AppUser?>(context);
             return Container(
               child: Column(children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
+                  children: const [
                     SizedBox(width: 150,
                       ),
                     SizedBox( width: 40,
@@ -73,8 +73,8 @@ class NutritionWidget extends StatelessWidget {
                   ],
                 ),
                 SizedBox(
-                  height: 550,
-                  child: ListView.builder(itemCount: 7,
+                  height: 610,
+                  child: ListView.builder(itemCount: 8,
                       itemBuilder: (context, index) {
                         return NutritionBarCard(category: categories[index],
                             limit: target[index],

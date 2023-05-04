@@ -1,6 +1,7 @@
 import 'package:cfl_app/userData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+//nutritionGoals object
 class NutritionGoals{
   int? calories;
   int? fat;
@@ -11,6 +12,7 @@ class NutritionGoals{
   int? salt;
   int? fibre;
 
+  //sets the goals to Reference intake by default
   NutritionGoals({
     this.calories = 2000,
     this.fat = 70,
@@ -22,6 +24,7 @@ class NutritionGoals{
     this.fibre = 30,
   });
 
+  //calculates the basal metabolic rate from users information
   num setBMR(UserData user){
     num bmr = 10* user.weight! + 6.25*user.height! - (5* user.age!);
     if(user.sex == 'Male'){
@@ -32,19 +35,8 @@ class NutritionGoals{
     }
     return bmr;
   }
-  NutritionGoals.setGoalsActivity(UserData user){
-    num bmr = setBMR(user);
-    if(user.activityLevel == 1){
-      calories = (1.1*bmr).toInt();
-    } else if(user.activityLevel == 2){
-      calories = (1.3*bmr).toInt();
-    }  else if(user.activityLevel == 3){
-      calories = (1.5*bmr).toInt();
-    } else if(user.activityLevel == 4){
-      calories = (1.7*bmr).toInt();
-    }
-  }
 
+  //calculates daily macronutrient goals
   NutritionGoals.setGoals(UserData user){
     num bmr = setBMR(user);
     List<double> weightMultiplier = [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1];
@@ -66,6 +58,7 @@ class NutritionGoals{
     fat = (calories! * (user.fatPercentage!/100)~/9);
     saturates = (calories! * (8/100)~/9);
     sugars = (calories! * (8/100)~/4);
+    salt = 6;
     fibre = ((calories!/1000)*14).toInt();
   }
 

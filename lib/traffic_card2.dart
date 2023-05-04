@@ -40,9 +40,9 @@ class TrafficCard2 extends StatelessWidget {
       Padding(padding: EdgeInsets.all(5),
       child:Container(
         decoration: BoxDecoration(
-          color: myColor,
+          color: Colors.white.withOpacity(0.1),
             borderRadius: BorderRadius.circular(5),
-            border: Border.all(color: Colors.black)),
+            border: Border.all(color: Colors.black.withOpacity(0.1))),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -51,8 +51,9 @@ class TrafficCard2 extends StatelessWidget {
               child: Text(
                 textAlign: TextAlign.center,
                 '$category values per 100g',
-                style: TextStyle(
-                  color: Colors.white,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Fig-tree',
                   fontWeight: FontWeight.bold,
                   fontSize: 16.0,
                 ),
@@ -66,12 +67,11 @@ class TrafficCard2 extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Padding(
-                padding: EdgeInsets.all(2) ,
+                padding: const EdgeInsets.all(4) ,
                     child: Container(
-                      decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.black)),
+                      decoration:  BoxDecoration(
+                          color: const Color(0xFF29BF12).withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(5),),
 
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
@@ -79,8 +79,8 @@ class TrafficCard2 extends StatelessWidget {
                           Text(
                             'Green: \n$greenValue',
                             textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
+                            style: const TextStyle(
+                              color: Color(0xFF29BF12),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -89,26 +89,21 @@ class TrafficCard2 extends StatelessWidget {
                     ),
                     ),
                   ),
-                  /*SizedBox(
-                    width: 16.0,
-                  ),*/
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.all(3.0),
                     child: Container(
                       decoration: BoxDecoration(
-                          //color: myColor,
-                          color: Colors.amber,
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.black)),
+                          color: Color(0xFFE56E00).withOpacity(0.15),
+                          borderRadius: BorderRadius.circular(5),),
 
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             'Amber: \n$amberValue',
-                            style: TextStyle(
-                              color: Colors.white,
+                            style: const TextStyle(
+                              color: Color(0xFFE56E00),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -123,17 +118,17 @@ class TrafficCard2 extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                           //color: myColor,
-                          color: Colors.red,
+                          color: const Color(0xFFD90404).withOpacity(0.15),
                           borderRadius: BorderRadius.circular(5),
-                          border: Border.all(color: Colors.black)),
+                      ),
                       //color: Colors.red,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             'Red: \n>$amberValue',
-                            style: TextStyle(
-                              color: Colors.white,
+                            style: const TextStyle(
+                              color: Color(0xFFD90404),
                               fontWeight: FontWeight.bold,
                             ),
                           ),

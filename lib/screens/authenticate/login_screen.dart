@@ -1,13 +1,12 @@
 
 import 'package:cfl_app/screens/authenticate/register.dart';
-import 'package:cfl_app/screens/home/home.dart';
 import 'package:cfl_app/screens/home/homeScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'auth.dart';
+import '../../components/auth.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'main.dart';
+import '../../main.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -28,20 +27,20 @@ class _LoginScreenState extends State<LoginScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text('Login'),
-        centerTitle: false,
-        backgroundColor: Colors.green,
+        centerTitle: true,
       ),
-      body:  Column(
+      body: SingleChildScrollView(child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          const SizedBox(height: 100),
           const Text(
             'Login',
-            /*style: TextStyle(
-                fontSize: 35,
-                color: Colors.blue,
-                fontWeight: FontWeight.bold
-            ),*/
+            style: TextStyle(
+              fontSize: 35,
+              fontWeight: FontWeight.bold,
+              color: myColor,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 30.0),
@@ -66,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     validator: (value) => value!.isEmpty ? "Enter an email" : null,
                   ),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: TextFormField(
@@ -87,15 +86,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const SizedBox(height: 30),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green
-                  ),
                   onPressed: () async{
                     if(signInformKey.currentState!.validate()){
                       dynamic result = await _auth.signInWithEMailAndPassword(email, password);
                       if(result == null){
                         setState(() => error = 'invalid email or password');
                       } else {
+                        if(!mounted) return;
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) =>
@@ -111,23 +108,25 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
 
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 Text(
                   error,
-                  style: TextStyle(color: Colors.red, fontSize: 12.0),
+                  style: const TextStyle(color: Colors.red, fontSize: 12.0),
                 ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green
-                  ),
+                TextButton(
+
                   onPressed: () async{
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Register()),
+                      MaterialPageRoute(builder: (context) => const Register()),
                     );
                   },
-                  child: Text(
-                      'Register'
+                  child: const Text(
+                      "Don't have an account?\nregister here",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      decoration: TextDecoration.underline
+                    ),
                   ),
 
                 ),
@@ -135,6 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
             )),
           )
         ],
+      ),
       ),
     );
   }

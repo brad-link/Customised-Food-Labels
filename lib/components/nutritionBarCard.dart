@@ -1,27 +1,28 @@
 import 'package:cfl_app/main.dart';
 import 'package:flutter/material.dart';
 
+//used to display daily values for each macronutrient
 class NutritionBarCard extends StatelessWidget {
   final String category;
   final int? limit;
-  final int? value;
+  final num? value;
   const NutritionBarCard({Key? key, required this.category, required this.limit, required this.value}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    int _value;
+    num _value;
     String remaining;
     bool overTarget = false;
-    int _limit = limit!;
+    num _limit = limit!;
     if(value! > _limit){
       //_value = (limit! - value!);
       _value = (value! - limit!);
       _limit = value!;
-      remaining = '-$_value';
+      remaining = '-${_value.toStringAsFixed(1)}';
       overTarget = true;
     } else {
       _value = limit! - value!;
-      remaining = '$_value';
+      remaining = _value.toStringAsFixed(1);
     }
     return Card(
       child: Padding(
@@ -33,25 +34,25 @@ class NutritionBarCard extends StatelessWidget {
           children: [
             SizedBox(width: 150,
             child: Text(category,
-            style: TextStyle(
+            style: const TextStyle(
               color: myColor
             ),),),
-            SizedBox( width: 40,
-            child: Text('$value',
+            SizedBox( width: 50,
+            child: Text('${value?.toStringAsFixed(1)}',
               textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                 color: myColor
             ))
               ,),
-            SizedBox( width: 40,
-              child: Text('$limit',
-                style: TextStyle(
+            SizedBox( width: 50,
+              child: Text('${limit?.toStringAsFixed(1)}',
+                style: const TextStyle(
                     color: myColor
                 ),
                 textAlign: TextAlign.center,),),
-            SizedBox( width: 40,
+            SizedBox( width: 50,
               child: Text(remaining,
-                style: TextStyle(
+                style: const TextStyle(
                     color: myColor
                 ),
                 textAlign: TextAlign.center,),),

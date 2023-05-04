@@ -1,17 +1,16 @@
-import 'package:cfl_app/TrafficValues.dart';
-import 'package:cfl_app/components/nutritionGoals.dart';
-import 'package:cfl_app/macro_selection.dart';
-import 'package:cfl_app/screens/home/homeScreen.dart';
-import 'package:flutter/cupertino.dart';
+
+import 'package:cfl_app/DataClasses/nutritionGoals.dart';
+import 'package:cfl_app/screens/diet_settings.dart';
+import 'package:cfl_app/screens/nutrition_goals_setup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
-import '../appUser.dart';
-import '../components/dietLog.dart';
+import '../DataClasses/appUser.dart';
 import '../database.dart';
 import '../userData.dart';
-import 'home/home.dart';
+import 'home/homeScreen.dart';
+
 
 class SetupForm extends StatefulWidget {
   const SetupForm({Key? key}) : super(key: key);
@@ -27,6 +26,7 @@ class _SetupFormState extends State<SetupForm> {
   int? height;
   num? currentWeight;
   String? gender;
+  bool? custom;
   List<String> activityLevels = [
     'sedentary',
     'lightly active',
@@ -50,15 +50,14 @@ class _SetupFormState extends State<SetupForm> {
   Future chooseDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: dOB ?? DateTime.now(),
+      initialDate: dOB ?? DateTime.now().subtract(const Duration(days: 3650)),
       firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      lastDate: DateTime.now().subtract(const Duration(days: 3650)),
     );
     if (picked != null) {
       setState(() {
         dOB = picked;
       });
-      //getAge(dOB);
     }
   }
 
@@ -79,26 +78,26 @@ class _SetupFormState extends State<SetupForm> {
       onWillPop: () async {
         return false;
       },
-      child: StreamBuilder<UserData?>(
-          stream: DatabaseService(uid: user?.uid).userInfo,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              UserData? userInfo = snapshot.data;
-              return Scaffold(
+      child: Scaffold(
+                resizeToAvoidBottomInset: false,
                 appBar: AppBar(
                   automaticallyImplyLeading: false,
                   title: const Text('Personal details'),
                   centerTitle: false,
                 ),
-                body: Form(
+                body: SingleChildScrollView(
+                  child: Form(
                   key: _formKey,
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          textInputAction: TextInputAction.next,
                           keyboardType: TextInputType.text,
                           decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
                               labelText: 'Name: ',
                               hintText: 'Please enter your full name'),
                           onChanged: (value) {
@@ -109,57 +108,22 @@ class _SetupFormState extends State<SetupForm> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          decoration: const InputDecoration(
-                            labelText: 'Current weight(kg): ',
-                          ),
-                          validator: (value) =>
-                              value!.isEmpty ? "enter your weight" : null,
-                          onChanged: (value) {
-                            if (value.isEmpty) {
-                              currentWeight = null;
-                            } else {
-                              currentWeight = num.tryParse(value);
-                            }
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ],
-                          decoration: const InputDecoration(
-                            labelText: 'Height(cm): ',
-                          ),
-                          validator: (value) =>
-                              value!.isEmpty ? "enter your weight" : null,
-                          onChanged: (value) {
-                            if (value.isEmpty) {
-                              height = null;
-                            } else {
-                              height = int.parse(value);
-                            }
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
-                        child: Column(
-                          children: [
-                            const Text('Gender: '),
-                            Row(
+                        padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  border: Border.all(color: Colors.black.withOpacity(0.1))
+                              ),child: Column(
                               children: [
+                                const Text('Gender: ',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 20),),
+                                Row(
+                                  children:[
                                 Expanded(
-                                  child: RadioListTile<String>(
-                                    title: const Text('Male'),
+                                  child: RadioListTile(
+                                    title: const Text('Male',
+                                      style: TextStyle(fontSize: 12),),
                                     value: 'Male',
                                     groupValue: gender,
                                     onChanged: (value) {
@@ -170,13 +134,61 @@ class _SetupFormState extends State<SetupForm> {
                                   ),
                                 ),
                                 Expanded(
-                                  child: RadioListTile<String>(
-                                    title: const Text('Female'),
+                                  child: RadioListTile(
+                                    title: const Text('Female',
+                                      style: TextStyle(fontSize: 12),),
                                     value: 'Female',
                                     groupValue: gender,
                                     onChanged: (value) {
                                       setState(() {
-                                        gender = value;
+                                        gender = value!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                        ]),
+                            ),
+                      ),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(color: Colors.black.withOpacity(0.1))
+                        ),
+                        child:Column(
+                          children: [
+                             const Text('Would you Like personalised nutrition goals or RDI: ',
+                               textAlign: TextAlign.center,
+                               style: TextStyle(fontSize: 18),
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: RadioListTile(
+                                    title: const Text('RDI',
+                                    style: TextStyle(fontSize: 12),),
+                                    value: false,
+                                    groupValue: custom,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        custom = value!;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                Expanded(
+                                  child: RadioListTile(
+                                    title: const Text('Personalised',
+                                      style: TextStyle(fontSize: 12),),
+                                    value: true,
+                                    groupValue: custom,
+                                    onChanged: (bool? value) {
+                                      setState(() {
+                                        custom = value!;
                                       });
                                     },
                                   ),
@@ -185,101 +197,69 @@ class _SetupFormState extends State<SetupForm> {
                             ),
                           ],
                         ),
+                        ),
                       ),
+                      const SizedBox(height: 20,),
                       Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Row(
+                        padding: const EdgeInsets.all(5),
+                        child: Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text('Date of Birth: '),
-                            IconButton(
+                            const Text('Date of Birth: '),
+                            if(dOB != null)
+                            TextButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white
+                              ),
                                 onPressed: () => chooseDate(context),
-                                icon: const Icon(Icons.calendar_today))
+                                icon: const Icon(Icons.calendar_today),
+                              label: Text(DateFormat('dd-MM-yyyy').format(dOB!),
+                              style: const TextStyle(
+                                color: Colors.black,
+                              ),),),
+                            if(dOB == null)
+                              IconButton(
+                                onPressed: () => chooseDate(context),
+                                icon: const Icon(Icons.calendar_today),)
                           ],
-                        ),
+                        ),),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Row(
-                          children: [
-                            Text('Activity Level: '),
-                            Expanded(child:
-                            DropdownButtonFormField<int>(
-                              value: activeLevelSelected,
-                              onChanged: (int? newValue) {
-                                setState(() {
-                                  activeLevelSelected = newValue!;
-                                  //checked = selectedPortion;
-                                  //portion = double.parse(selectedPortion!);
-                                });
-                              },
-                              items: activityLevels
-                                  .map((option) => DropdownMenuItem<int>(
-                                        value:
-                                            activityLevels.indexOf(option) + 1,
-                                        child: Text(option),
-                                      ))
-                                  .toList(),
-                            ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(5),
-                        child: Row(
-                          children: [
-                            Text('Activity Level: '),
-                            Expanded(child:
-                            DropdownButtonFormField<int>(
-                              value: weightGoalSelected,
-                              onChanged: (int? newValue) {
-                                setState(() {
-                                  weightGoalSelected = newValue!;
-                                  //checked = selectedPortion;
-                                  //portion = double.parse(selectedPortion!);
-                                });
-                              },
-                              items: weightGoals
-                                  .map((option) => DropdownMenuItem<int>(
-                                value:
-                                weightGoals.indexOf(option) + 1,
-                                child: Text(option),
-                              ))
-                                  .toList(),
-                            ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      const SizedBox(height: 20,),
                       Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5.0),
                           child: ElevatedButton(
                               onPressed: () async {
-                                print(gender);
                                 if (_formKey.currentState!.validate()) {
                                   UserData update = UserData(
                                     name: name,
-                                    height: height,
-                                    weight: currentWeight,
+                                    custom: custom,
                                     sex: gender,
                                     age: getAge(dOB),
                                     dOB: dOB,
-                                    activityLevel: activeLevelSelected,
-                                    weightGoal: weightGoalSelected
                                   );
-                                  await DatabaseService(uid: user?.uid).updateUser(update);
-                                  NutritionGoals goals = NutritionGoals();
-                                  await DatabaseService(uid: user?.uid)
-                                      .setNutritionGoals(goals);
-                                  //await DatabaseService(uid: user?.uid).updateMTL(
-                                  //3.0, 17.5, 1.5, 5.0, 5.0, 22.5, 0.3, 1.5);
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => MacroSelection(
-                                              userData: update,
-                                            )),
-                                  );
+                                  if(custom == false) {
+                                    await DatabaseService(uid: user?.uid)
+                                        .updateUser(update);
+                                    NutritionGoals goals = NutritionGoals();
+                                    await DatabaseService(uid: user?.uid)
+                                        .setNutritionGoals(goals);
+                                    if(!mounted) return;
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) =>
+                                        const HomeScreen(),
+                                        ),
+                                    );
+                                  } else if(custom == true) {
+                                    await DatabaseService(uid: user?.uid)
+                                        .updateUser(update);
+                                    if(!mounted) return;
+                                    Navigator.pushReplacement(
+                                        context,
+                                    MaterialPageRoute(builder: (context) =>  const NutritionGoalsSetup()));
+                                  }
                                 }
                               },
                               child: const Text(
@@ -288,11 +268,14 @@ class _SetupFormState extends State<SetupForm> {
                     ],
                   ),
                 ),
-              );
-            } else {
-              return Container();
-            }
-          }),
+                ),
+              ),
+            //} else {
+              //return Container(
+                //child: Text('ERROR'),
+              //);
+            //}
+          //}),
     );
   }
 }

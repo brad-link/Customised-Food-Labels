@@ -1,15 +1,15 @@
 import 'dart:convert';
 
-import 'package:cfl_app/TrafficValues.dart';
+import 'package:cfl_app/DataClasses/TrafficValues.dart';
 import 'package:cfl_app/database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:cfl_app/product.dart';
+import 'package:cfl_app/DataClasses/product.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 
-import 'appUser.dart';
+import 'DataClasses/appUser.dart';
 
 int ref_calories = 2000;
 int ref_fat = 70;

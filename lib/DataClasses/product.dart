@@ -75,21 +75,21 @@ class Product {
   setDateTime(DateTime time, String day){
     dateAdded = day;
     timeAdded = time;
-    String? timeString = DateFormat('h:mm:ss a').format(time);
+    String? timeString = DateFormat('MMMM dd y H:mm:ss').format(time);
     productID = (productName! + timeString);
   }
 
-  int macroValue(num? size, num? serving, num? multiplier){
-    int update = 0;
-    if(size != null){
-      update = ((size/100) * serving! * multiplier!).toInt();
+  num macroValue(num? size, num? serving, num? multiplier){
+    num update = 0;
+    if(size != null && serving != null){
+      update = ((size/100) * serving * multiplier!);
     }
     return update;
   }
 
   Product setServingMacros(Product product){
     product.fat =  macroValue(product.fat_100g, product.portion, product.numOfPortions);
-    product.calories= macroValue(product.calories_100g, product.portion, product.numOfPortions);
+    product.calories= macroValue(product.calories_100g, product.portion, product.numOfPortions).toInt();
     product.carbs =  macroValue(product.carbs_100g, product.portion, product.numOfPortions);
     product.sugar = macroValue(product.sugar_100g, product.portion, product.numOfPortions);
     product.salt = macroValue(product.salt_100g, product.portion, product.numOfPortions);
@@ -101,16 +101,17 @@ class Product {
 
   factory Product.fromJson(final json) {
     var serving = json["product"]["serving_quantity"];
-    //var type = json["product"]["nutriscore_data"]['is_beverage'];
+    int? type;
+    if(json["product"]["nutriscore_data"]["is_beverage"] != null){
+      type = json["product"]["nutriscore_data"]["is_beverage"];
+    }
     String? productType;
     num? serveSize;
-    /*if(type == 1){
+    if(type == 1){
       productType = 'ml';
-    } else if(type == 0){
+    } else{
       productType = 'g';
-    } else if(type == null){
-
-    }*/
+    }
     if (serving is String) {
       serveSize = num.parse(serving);
     } else {
@@ -169,6 +170,7 @@ class Product {
       'serving_quantity': serving_quantity,
       'image': image,
       'portion': portion,
+      'servingType': servingType,
       'numOfPortions': numOfPortions,
       'dateAdded': dateAdded,
       'timeAdded': timeAdded,
@@ -209,6 +211,7 @@ class Product {
       image: data['image'],
       portion: data['portion'],
       numOfPortions: data['numOfPortions'],
+      servingType: data['servingType'],
       dateAdded: data['dateAdded'],
       timeAdded: timestamp.toDate(),
       productID: data['productID'],

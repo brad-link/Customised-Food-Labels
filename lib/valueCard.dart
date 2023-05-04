@@ -89,42 +89,5 @@ class ValueCard extends StatelessWidget {
           )
     ]
     );
-    /*
-    return Card(
-      color: getColour(size?? -1),
-     child: card,
-     /* child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-              child: Container(
-                  child: Text('$category',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ))
-              ),
-          ),
-          Expanded(
-            child: Container(
-                child: Text('$size',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ))
-            ),
-          ),
-          Expanded(
-            child: Container(
-                child: Text('$percOutput%',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ))
-            ),
-          ),
-        ],
-      ),*/
-    );*/
   }
 }

@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class UserData{
   //final String? uid;
    String? name;
+   bool? custom;
   int? height;
   num? weight;
   DateTime? dOB;
@@ -17,6 +18,7 @@ class UserData{
   UserData({
     //this.uid,
     this.name = 'user',
+    required this.custom,
     this.height,
     this.weight,
     this.dOB,
@@ -35,8 +37,8 @@ class UserData{
       ) {
     final data = snapshot.data();
     return UserData(
-      //uid: data?['uid'],
       name: data?['name'],
+      custom: data?['custom'],
       height: data?['height'],
       weight: data?['weight'],
       age: data?['age'],
@@ -51,9 +53,9 @@ class UserData{
 
   Map<String, dynamic> toFirestore() {
     return {
-      //'uid': uid,
-      'name': name,
-      'age': age,
+      if(name != null) 'name': name,
+      'custom': custom,
+      if (age != null) 'age': age,
       'weight': weight,
       'height': height,
       'sex': sex,

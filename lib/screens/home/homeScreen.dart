@@ -1,8 +1,6 @@
-import 'package:cfl_app/components/customAppBar.dart';
 import 'package:cfl_app/components/nutritionWidget.dart';
 import 'package:cfl_app/dailyProducts.dart';
 import 'package:cfl_app/database.dart';
-import 'package:cfl_app/screens/home/logEntry.dart';
 import 'package:cfl_app/screens/scannerWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +9,10 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../appUser.dart';
-import '../../auth.dart';
-import '../../components/dietLog.dart';
+import '../../DataClasses/appUser.dart';
+import '../../components/auth.dart';
+import '../../components/custom_app_bar.dart';
+import '../../DataClasses/dietLog.dart';
 
 String scanBarcode = '';
 bool codeScanned = false;
@@ -109,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           List<DietLog> tracker = snapshot.data!;
           checkIfExists(tracker, user!);
-          controller = PageController(initialPage: 0);
+          controller = PageController(initialPage: 1);
           DateTime firstDate = tracker.last.date;
 
           return PageView.builder(
@@ -118,16 +117,18 @@ class _HomeScreenState extends State<HomeScreen> {
             itemCount: tracker.length,
             itemBuilder: (context, index) {
               DietLog? day = tracker[index];
-              DateTime? date = day?.date;
-              print(date.toString());
+              DateTime? date = day.date;
               String today = DateFormat('dd-MM-yyyy').format(DateTime.now());
+              String tomorrow = DateFormat('dd-MM-yyyy').format(DateTime.now().add(Duration(days: 1)));
               String yesterday = DateFormat('dd-MM-yyyy').format(DateTime.now().subtract(Duration(days: 1)));
               String dateString = DateFormat('dd-MM-yyyy').format(day.date);
               if(dateString == today){
                 title = 'Today';
               } else if(dateString == yesterday){
                 title = 'Yesterday';
-              } else{
+              } else if(dateString == tomorrow){
+                title = 'Tomorrow';
+              }else{
                 title = DateFormat('d MMMM y').format(date!);
               }
               return Scaffold(
@@ -159,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           ),
                           Padding(padding: EdgeInsets.all(12.0),
-                              child: DailyProducts(currentDate: date!,),
+                              child: DailyProducts(currentDate: date,),
                           ),
                         ],
                       ),
@@ -174,11 +175,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void checkIfExists(List<DietLog> tracker, AppUser user) async{
-    DietLog currentDay = tracker[0];
     DateTime lastEntry = tracker[0].date;
     DateTime now = DateTime.now();
     if(lastEntry != now){
-      while(lastEntry.isBefore(now.subtract(Duration(days: 1)))){
+      while(lastEntry.isBefore(now)){
         lastEntry = lastEntry.add(Duration(days: 1));
         DietLog newEntry = DietLog(date: lastEntry);
         await DatabaseService(uid: user.uid).createLog(newEntry);

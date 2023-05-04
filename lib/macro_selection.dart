@@ -1,5 +1,5 @@
-import 'package:cfl_app/components/customAppBar.dart';
-import 'package:cfl_app/components/nutritionGoals.dart';
+import 'package:cfl_app/DataClasses/nutritionGoals.dart';
+import 'package:cfl_app/main.dart';
 import 'package:cfl_app/screens/home/homeScreen.dart';
 import 'package:cfl_app/userData.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,10 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wheel_chooser/wheel_chooser.dart';
 
-import 'appUser.dart';
+import 'DataClasses/appUser.dart';
 import 'database.dart';
-
-
 
 class MacroSelection extends StatefulWidget {
   final UserData userData;
@@ -19,7 +17,6 @@ class MacroSelection extends StatefulWidget {
   @override
   State<MacroSelection> createState() => _MacroSelectionState();
 }
-
 
 class _MacroSelectionState extends State<MacroSelection> {
   late int carbGoal;
@@ -32,7 +29,7 @@ class _MacroSelectionState extends State<MacroSelection> {
   int? calories;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     carbGoal = widget.userData.carbPercentage!;
     fatGoal = widget.userData.fatPercentage!;
@@ -43,48 +40,57 @@ class _MacroSelectionState extends State<MacroSelection> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<AppUser?>(context);
-    return StreamBuilder<NutritionGoals?>(
-        stream: DatabaseService(uid: user?.uid).getGoals(),
-        builder: (context, snapshot) {
-          if(snapshot.hasData) {
-            NutritionGoals goals = snapshot.data!;
-            calories = snapshot.data!.calories;
-            dailyCarbs = snapshot.data!.carbohydrates;
-            dailyProtein = snapshot.data!.protein;
-            dailyFat = snapshot.data!.fat;
-            return Scaffold(
-              appBar: AppBar(
-                title: Text('Macro Goals'),
-                automaticallyImplyLeading: true,
-              ),
-              body: Column(
+    return Scaffold(
+      body: StreamBuilder<NutritionGoals?>(
+          stream: DatabaseService(uid: user?.uid).getGoals(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              NutritionGoals goals = snapshot.data!;
+              calories = snapshot.data!.calories;
+              dailyCarbs = snapshot.data!.carbohydrates;
+              dailyProtein = snapshot.data!.protein;
+              dailyFat = snapshot.data!.fat;
+
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Expanded(
-                        child: Container(
-                          height: 50,
-                          child: Text('daily carbohydrate intake: \n${((calories! * (carbGoal / 100))/ 4).toInt()}'),
+                        child: SizedBox(
+                          height: 70,
+                          child: Text(
+                            'Daily\nCarbohydrate\nintake: \n${(calories! * (carbGoal / 100)) ~/ 4}',
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                       Expanded(
-                        child: Container(
-                          height: 50,
-                          child: Text('daily protein intake: \n${((calories! * (proteinGoal/ 100))~/ 4)}'),
+                        child: SizedBox(
+                          height: 70,
+                          child: Text(
+                            'Daily\nProtein\nintake: \n${((calories! * (proteinGoal / 100)) ~/ 4)}',
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                       Expanded(
-                        child: Container(
-                          height: 50,
-                          child: Text('daily fat intake: \n${((calories! * (fatGoal / 100))~/ 9)}'),
+                        child: SizedBox(
+                          height: 70,
+                          child: Text(
+                            'Daily\nFat\nintake: \n${((calories! * (fatGoal / 100)) ~/ 9)}',
+                            textAlign: TextAlign.center,
+                          ),
                         ),
                       ),
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Expanded(
-                        child: Container(
+                        child: SizedBox(
                           height: 100,
                           child: WheelChooser.integer(
                             initValue: carbGoal,
@@ -95,7 +101,8 @@ class _MacroSelectionState extends State<MacroSelection> {
                               setState(() {
                                 carbGoal = val;
                                 dailyCarbs =
-                                    (((calories! * carbGoal) / 100) * 4).toInt();
+                                    (((calories! * carbGoal) / 100) * 4)
+                                        .toInt();
                                 totalPercentage =
                                     fatGoal! + carbGoal! + proteinGoal!;
                               });
@@ -104,7 +111,7 @@ class _MacroSelectionState extends State<MacroSelection> {
                         ),
                       ),
                       Expanded(
-                        child: Container(
+                        child: SizedBox(
                           height: 100,
                           child: WheelChooser.integer(
                             initValue: proteinGoal,
@@ -124,7 +131,7 @@ class _MacroSelectionState extends State<MacroSelection> {
                         ),
                       ),
                       Expanded(
-                        child: Container(
+                        child: SizedBox(
                           height: 100,
                           child: WheelChooser.integer(
                             initValue: fatGoal,
@@ -146,37 +153,53 @@ class _MacroSelectionState extends State<MacroSelection> {
                     ],
                   ),
                   Text('Values must add up to 100: $totalPercentage'),
-                  ElevatedButton(
-                      onPressed: totalPercentage == 100 ? () async {
-                        UserData update = UserData(
-                            name: widget.userData.name,
-                            height: widget.userData.height,
-                            weight: widget.userData.weight,
-                            age: widget.userData.age,
-                            sex: widget.userData.sex,
-                            dOB: widget.userData.dOB,
-                            activityLevel: widget.userData.activityLevel,
-                            carbPercentage: carbGoal,
-                            proteinPercentage: proteinGoal,
-                            fatPercentage: fatGoal,
-                            weightGoal: widget.userData.weightGoal
-                        );
-                        await DatabaseService(uid: user?.uid).updateUser(
-                            update);
-                        NutritionGoals goals = NutritionGoals.setGoals(update);
-                        await DatabaseService(uid: user?.uid).setNutritionGoals(goals);
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) =>
-                            const HomeScreen()));
-                      } : null,
-                      child: const Text('confirm'))
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: myColor.withOpacity(0.15),
+                            ),
+                            onPressed: () => Navigator.pop(context),
+                            child: Text('cancel')),
+                        ElevatedButton(
+                            onPressed: totalPercentage == 100
+                                ? () async {
+                                    UserData update = UserData(
+                                        name: widget.userData.name,
+                                        custom: widget.userData.custom,
+                                        height: widget.userData.height,
+                                        weight: widget.userData.weight,
+                                        age: widget.userData.age,
+                                        sex: widget.userData.sex,
+                                        dOB: widget.userData.dOB,
+                                        activityLevel:
+                                            widget.userData.activityLevel,
+                                        carbPercentage: carbGoal,
+                                        proteinPercentage: proteinGoal,
+                                        fatPercentage: fatGoal,
+                                        weightGoal: widget.userData.weightGoal);
+                                    print(update.height);
+                                    print(update.weight);
+                                    print(update.age);
+                                    await DatabaseService(uid: user?.uid)
+                                        .updateUser(update);
+                                    NutritionGoals goals =
+                                        NutritionGoals.setGoals(update);
+                                    await DatabaseService(uid: user?.uid)
+                                        .setNutritionGoals(goals);
+                                    if (!mounted) return;
+                                    Navigator.pop(context);
+                                  }
+                                : null,
+                            child: const Text('Update')),
+                      ]),
                 ],
-              ),
-            );
-        } else{
-            return CircularProgressIndicator();
-          }
-        });
+              );
+            } else {
+              return const CircularProgressIndicator();
+            }
+          }),
+    );
   }
 }
