@@ -1,8 +1,6 @@
 import 'package:cfl_app/DataClasses/appUser.dart';
 import 'package:intl/intl.dart';
-
-import '../DataClasses/appUser.dart';
-import '../database.dart';
+import 'database.dart';
 import '../DataClasses/product.dart';
 import '../DataClasses/dietLog.dart';
 

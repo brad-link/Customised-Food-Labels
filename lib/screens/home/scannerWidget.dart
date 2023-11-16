@@ -1,18 +1,17 @@
 import 'dart:convert';
 import 'package:cfl_app/DataClasses/nutritionGoals.dart';
-import 'package:cfl_app/screens/scannedScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
-import '../addProduct.dart';
-import '../DataClasses/appUser.dart';
-import '../database.dart';
-import '../DataClasses/product.dart';
-import '../tabbed_search.dart';
-import 'ScannedScreen2.dart';
+import '../addProductScreen/addProduct.dart';
+import '../../DataClasses/appUser.dart';
+import '../../components/database.dart';
+import '../../DataClasses/product.dart';
+import '../../tabbed_search.dart';
+import '../productView/ScannedScreen.dart';
 
 String scanBarcode = '';
 bool codeScanned = false;
@@ -61,7 +60,7 @@ class _ScannerState extends State<Scanner> {
         Product product = savedProducts[i];
         productExists = true;
         Navigator.push(context, MaterialPageRoute(builder: (context) =>
-            ScannedScreen2(
+            ScannedScreen(
               product: product, date: widget.date, goals: nutriGoals,)));
         break;
       }
@@ -75,7 +74,7 @@ class _ScannerState extends State<Scanner> {
         Product product = Product.fromJson(jsonProduct);
         if (!mounted) return;
         Navigator.push(context, MaterialPageRoute(builder: (context) =>
-            ScannedScreen2(
+            ScannedScreen(
               product: product, date: widget.date, goals: nutriGoals,)));
       } else {
         Product newProduct = Product();
@@ -123,9 +122,6 @@ class _ScannerState extends State<Scanner> {
                 key: const Key('scan'),
                   height: 40,
                   child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                       // backgroundColor: Colors.green,
-                      ),
                       onPressed: () async {
                         NutritionGoals? goals = await DatabaseService(uid: user?.uid).getNutritionGoals();
                         barcodeScan(goals);},
@@ -137,9 +133,6 @@ class _ScannerState extends State<Scanner> {
              SizedBox(
                 height: 40,
                 child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                     // backgroundColor: Colors.green,
-                    ),
                     onPressed: () async {
                       widget.displayButton;
                             final navigator = context;

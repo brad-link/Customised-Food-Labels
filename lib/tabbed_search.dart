@@ -1,13 +1,7 @@
-
-import 'package:cfl_app/database.dart';
-import 'package:cfl_app/DataClasses/product.dart';
 import 'package:cfl_app/search_productdb.dart';
 import 'package:cfl_app/search_user_products.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import 'DataClasses/appUser.dart';
 
 class TabbedSearch extends StatefulWidget {
   final DateTime currentDate;
@@ -27,7 +21,7 @@ class _TabbedSearchState extends State<TabbedSearch> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text('Search Products'),
+            title: const Text('Search Products'),
             bottom: const TabBar(
                 tabs: [
                   Tab(text: 'Your saved products'),

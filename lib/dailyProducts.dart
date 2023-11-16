@@ -1,14 +1,9 @@
 import 'package:cfl_app/DataClasses/appUser.dart';
 import 'package:cfl_app/clickable_product_card.dart';
-import 'package:cfl_app/database.dart';
+import 'package:cfl_app/components/database.dart';
 import 'package:cfl_app/DataClasses/product.dart';
-import 'package:cfl_app/productCard.dart';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'DataClasses/nutritionGoals.dart';
 import 'main.dart';
 
 class DailyProducts extends StatefulWidget {
@@ -36,39 +31,36 @@ class _DailyProductsState extends State<DailyProducts> {
           }
           if(snapshot.hasData){
           List<Product> products = snapshot.data!;
-          return Container(
-                //border: Border.all(color: Colors.black)),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: myColor,
-                    borderRadius: BorderRadius.circular(5),),
-                  height: 34,
-                 width: 300,
-                 child: const Center(child: Text('Products Consumed',
-                   textAlign: TextAlign.center,
-                   style: TextStyle(
-                     color: Colors.white,
-                     fontWeight: FontWeight.bold,
-                     fontSize: 20.0,
-                   ),),),
-                ),
-            SizedBox(
-              height: 200,
-            child: ListView.builder(
-            itemCount: products.length,
-              itemBuilder: (context, index){
-                return ClickableProductCard(product: products[index],
-                        date: widget.currentDate,
-                        viewButton: () {}, button: () {}, section: 'daily',);
-                   // }
-               // );
-              }),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: myColor,
+                  borderRadius: BorderRadius.circular(5),),
+                height: 34,
+               width: 300,
+               child: const Center(child: Text('Products Consumed',
+                 textAlign: TextAlign.center,
+                 style: TextStyle(
+                   color: Colors.white,
+                   fontWeight: FontWeight.bold,
+                   fontSize: 20.0,
+                 ),),),
+              ),
+          SizedBox(
+            height: 200,
+          child: ListView.builder(
+          itemCount: products.length,
+            itemBuilder: (context, index){
+              return ClickableProductCard(product: products[index],
+                      date: widget.currentDate,
+                      viewButton: () {}, button: () {}, section: 'daily',);
+                 // }
+             // );
+            }),
           ),
-            ],
-            ),
+          ],
           );
           } else{
             return const CircularProgressIndicator();

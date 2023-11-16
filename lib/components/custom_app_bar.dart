@@ -2,12 +2,11 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../DataClasses/appUser.dart';
-import '../database.dart';
+import 'database.dart';
 import '../screens/settings_form.dart';
 import '../traffic_settings.dart';
-import '../userData.dart';
+import '../DataClasses/userData.dart';
 import 'auth.dart';
 
 //custom app bar used when someone is logged in

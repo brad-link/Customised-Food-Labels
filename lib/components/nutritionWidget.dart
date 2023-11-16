@@ -1,10 +1,9 @@
 import 'package:cfl_app/DataClasses/dietLog.dart';
 import 'package:cfl_app/components/nutritionBarCard.dart';
 import 'package:cfl_app/DataClasses/nutritionGoals.dart';
-import 'package:cfl_app/database.dart';
+import 'package:cfl_app/components/database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
-
 import '../DataClasses/appUser.dart';
 import '../main.dart';
 

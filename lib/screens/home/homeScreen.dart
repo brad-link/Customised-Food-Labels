@@ -1,14 +1,11 @@
 import 'package:cfl_app/components/nutritionWidget.dart';
 import 'package:cfl_app/dailyProducts.dart';
-import 'package:cfl_app/database.dart';
-import 'package:cfl_app/screens/scannerWidget.dart';
+import 'package:cfl_app/components/database.dart';
+import 'package:cfl_app/screens/home/scannerWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
 import '../../DataClasses/appUser.dart';
 import '../../components/auth.dart';
 import '../../components/custom_app_bar.dart';
@@ -18,8 +15,6 @@ String scanBarcode = '';
 bool codeScanned = false;
 
 class HomeScreen extends StatefulWidget {
-  //final List<DietLog> diary;
-  //final int index;
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
@@ -67,28 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  /// For Continuous scan
-  Future<void> startBarcodeScanStream() async {
-    FlutterBarcodeScanner.getBarcodeStreamReceiver(
-            '#ff6666', 'Cancel', true, ScanMode.BARCODE)!
-        .listen((barcode) => print(barcode));
-  }
-
-  Future<void> barcodeScan() async {
-    String barcodeScanRes;
-    try {
-      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
-          '#ff6666', 'Cancel', true, ScanMode.QR);
-      print(barcodeScanRes);
-    } on PlatformException {
-      barcodeScanRes = 'Failed to get platform version.';
-    }
-    if (!mounted) return;
-    setState(() {
-      scanBarcode = barcodeScanRes;
-      codeScanned = true;
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -129,14 +102,14 @@ class _HomeScreenState extends State<HomeScreen> {
               } else if(dateString == tomorrow){
                 title = 'Tomorrow';
               }else{
-                title = DateFormat('d MMMM y').format(date!);
+                title = DateFormat('d MMMM y').format(date);
               }
               return Scaffold(
                 appBar: CustomAppBar(
                   title: title,
                   backButton: false,
                   calendar: IconButton(
-                      onPressed: () => chooseDate(context, firstDate, date!, tracker),
+                      onPressed: () => chooseDate(context, firstDate, date, tracker),
                       icon: const Icon(Icons.calendar_today)),
                 ),
                 body: Builder(
@@ -148,8 +121,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         direction: Axis.vertical,
 
                         children: [
-                          Padding(padding: EdgeInsets.all(12.0),
-                            child: Scanner(date: date!,
+                          Padding(padding: const EdgeInsets.all(12.0),
+                            child: Scanner(date: date,
                               scanButton: () {  },
                               displayButton: () {  },),
 

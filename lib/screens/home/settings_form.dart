@@ -1,12 +1,10 @@
-import 'package:cfl_app/DataClasses/TrafficValues.dart';
-import 'package:cfl_app/userData.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cfl_app/DataClasses/userData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../DataClasses/appUser.dart';
-import '../../database.dart';
+import '../../components/database.dart';
 class SettingsForm2 extends StatefulWidget {
   const SettingsForm2({Key? key}) : super(key: key);
 

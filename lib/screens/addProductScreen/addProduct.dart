@@ -1,13 +1,13 @@
-import 'package:cfl_app/addProductRows.dart';
+import 'package:cfl_app/screens/addProductScreen/addProductRows.dart';
 import 'package:cfl_app/components/addProductValues.dart';
-import 'package:cfl_app/database.dart';
+import 'package:cfl_app/components/database.dart';
 import 'package:cfl_app/DataClasses/product.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import 'DataClasses/appUser.dart';
-import 'components/custom_app_bar.dart';
+import '../../DataClasses/appUser.dart';
+import '../../components/custom_app_bar.dart';
 
 class AddProduct extends StatefulWidget {
   final String barcode;
@@ -143,6 +143,7 @@ class _AddProductState extends State<AddProduct> {
                   product.setDateTime(
                       DateTime.now(), day);
                   await DatabaseService().productsList(product);
+                  if(!mounted) return;
                   Navigator.pop(context);
                 } else{
                   String day =

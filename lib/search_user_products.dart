@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:search_page/search_page.dart';
 
-import 'database.dart';
+import 'components/database.dart';
 
 class SearchUserProducts extends StatelessWidget {
   final DateTime currentDate;

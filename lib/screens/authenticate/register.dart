@@ -1,5 +1,5 @@
 import 'package:cfl_app/main.dart';
-import 'package:cfl_app/screens/account_setup.dart';
+import 'package:cfl_app/screens/settings/account_setup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

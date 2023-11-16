@@ -1,21 +1,15 @@
 import 'dart:convert';
 
 import 'package:cfl_app/productSearch.dart';
-import 'package:cfl_app/search_productdb.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-import '../../addProduct.dart';
-import '../../DataClasses/appUser.dart';
 import '../../DataClasses/nutritionGoals.dart';
-import '../../database.dart';
+import '../../components/database.dart';
 import '../../DataClasses/product.dart';
-import '../../tabbed_search.dart';
-import '../ScannedScreen2.dart';
-import '../not_custom_scanned.dart';
+import '../productView/not_custom_scanned.dart';
 
 String scanBarcode = '';
 bool codeScanned = false;
@@ -109,7 +103,7 @@ class _DefaultScannerState extends State<DefaultScanner> {
 
   @override
   Widget build(BuildContext context) {
-    AppUser? user = Provider.of<AppUser?>(context, listen: false);
+    //AppUser? user = Provider.of<AppUser?>(context, listen: false);
     return Container(
         height: 200,
         width: 200,

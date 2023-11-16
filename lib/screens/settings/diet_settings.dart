@@ -1,15 +1,13 @@
-import 'package:cfl_app/DataClasses/dietLog.dart';
-import 'package:cfl_app/macro_selection.dart';
-import 'package:cfl_app/userData.dart';
+import 'package:cfl_app/screens/settings/macro_selection.dart';
+import 'package:cfl_app/DataClasses/userData.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
-import '../DataClasses/appUser.dart';
-import '../DataClasses/nutritionGoals.dart';
-import '../database.dart';
-import 'home/homeScreen.dart';
+import '../../DataClasses/appUser.dart';
+import '../../DataClasses/nutritionGoals.dart';
+import '../../components/database.dart';
+import '../../main.dart';
 
 class DietSettings extends StatefulWidget {
   final VoidCallback button;
@@ -74,8 +72,6 @@ class _DietSettingsState extends State<DietSettings> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserData? userInfo = snapshot.data;
-            String? currentWeightString = userInfo?.weight.toString();
-            String? heightString = userInfo?.height.toString();
             return Form(
               key: _formKey,
               child: Column(children: <Widget>[
@@ -178,11 +174,11 @@ class _DietSettingsState extends State<DietSettings> {
                         showMacroSettings(userInfo);
                         },
                        child: Text('Update Macro Split: \n'
-                      '${userInfo?.carbPercentage} : ${userInfo?.proteinPercentage} : ${userInfo?.fatPercentage} \n'
+                      '${userInfo.carbPercentage} : ${userInfo.proteinPercentage} : ${userInfo.fatPercentage} \n'
                       'Current Split')),
                 ElevatedButton(
                     style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                        ElevatedButton.styleFrom(backgroundColor: myColor),
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         UserData update = UserData(
@@ -193,6 +189,9 @@ class _DietSettingsState extends State<DietSettings> {
                             sex: userInfo?.sex,
                             age: userInfo?.age,
                             dOB: userInfo?.dOB,
+                            carbPercentage: userInfo?.carbPercentage,
+                            proteinPercentage: userInfo?.proteinPercentage,
+                            fatPercentage: userInfo?.fatPercentage,
                             activityLevel: activeLevelSelected ?? userInfo?.activityLevel,
                             weightGoal: weightGoalSelected ?? userInfo?.weightGoal);
                         await DatabaseService(uid: user?.uid)

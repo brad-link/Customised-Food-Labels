@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserData{
-  //final String? uid;
    String? name;
    bool? custom;
   int? height;
@@ -16,7 +15,6 @@ class UserData{
   int? weightGoal;
 
   UserData({
-    //this.uid,
     this.name = 'user',
     required this.custom,
     this.height,

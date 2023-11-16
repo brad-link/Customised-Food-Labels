@@ -1,4 +1,4 @@
-import 'package:cfl_app/userData.dart';
+import 'package:cfl_app/DataClasses/userData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 //nutritionGoals object

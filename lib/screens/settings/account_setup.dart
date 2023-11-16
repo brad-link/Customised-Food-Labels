@@ -1,15 +1,14 @@
 
 import 'package:cfl_app/DataClasses/nutritionGoals.dart';
-import 'package:cfl_app/screens/diet_settings.dart';
 import 'package:cfl_app/screens/nutrition_goals_setup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../DataClasses/appUser.dart';
-import '../database.dart';
-import '../userData.dart';
-import 'home/homeScreen.dart';
+import '../../DataClasses/appUser.dart';
+import '../../components/database.dart';
+import '../../DataClasses/userData.dart';
+import '../home/homeScreen.dart';
 
 
 class SetupForm extends StatefulWidget {

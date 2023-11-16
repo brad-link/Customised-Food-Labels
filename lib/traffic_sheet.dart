@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'dart:math' as math;
 
 import 'DataClasses/TrafficValues.dart';
-import 'database.dart';
+import 'components/database.dart';
 
 class TrafficSheet extends StatefulWidget {
   final num? green;
@@ -20,7 +20,7 @@ class TrafficSheet extends StatefulWidget {
       required this.value});
 
   @override
-  _TrafficSheetState createState() => _TrafficSheetState();
+  State<TrafficSheet> createState() => _TrafficSheetState();
 }
 
 class _TrafficSheetState extends State<TrafficSheet> {
@@ -45,7 +45,7 @@ class _TrafficSheetState extends State<TrafficSheet> {
         children: [
           const SizedBox(height: 16),
           Text(
-            'Adjust $_value values:',
+            'Adjust $_value values\nper 100g:',
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
           Row(
@@ -77,10 +77,10 @@ class _TrafficSheetState extends State<TrafficSheet> {
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.all(3.0),
+                  padding: const EdgeInsets.all(3.0),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Color(0xFFE56E00).withOpacity(0.15),
+                      color: const Color(0xFFE56E00).withOpacity(0.15),
                       borderRadius: BorderRadius.circular(5),),
 
                     child: Column(
@@ -100,7 +100,7 @@ class _TrafficSheetState extends State<TrafficSheet> {
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.all(3.0),
+                  padding: const EdgeInsets.all(3.0),
                   child: Container(
                     decoration: BoxDecoration(
                       //color: myColor,
@@ -112,7 +112,7 @@ class _TrafficSheetState extends State<TrafficSheet> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          'Red: \n>$_amber +',
+                          'Red: \n>$_amber',
                           style: const TextStyle(
                             color: Color(0xFFD90404),
                             fontWeight: FontWeight.bold,
@@ -125,7 +125,7 @@ class _TrafficSheetState extends State<TrafficSheet> {
               ),
             ],
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Container(
             width: double.infinity,
               child: Slider(

@@ -78,6 +78,9 @@ class Product {
     String? timeString = DateFormat('MMMM dd y H:mm:ss').format(time);
     productID = (productName! + timeString);
   }
+  setServing(num? serving){
+    serving_quantity ??= serving;
+  }
 
   num macroValue(num? size, num? serving, num? multiplier){
     num update = 0;
@@ -95,16 +98,16 @@ class Product {
     product.salt = macroValue(product.salt_100g, product.portion, product.numOfPortions);
     product.satFat = macroValue(product.sat_fat100g, product.portion, product.numOfPortions);
     product.protein = macroValue(product.protein_100g, product.portion, product.numOfPortions);
-
+    product.fibre = macroValue(product.fibre_100g, product.portion, product.numOfPortions);
     return product;
   }
 
   factory Product.fromJson(final json) {
     var serving = json["product"]["serving_quantity"];
     int? type;
-    if(json["product"]["nutriscore_data"]["is_beverage"] != null){
-      type = json["product"]["nutriscore_data"]["is_beverage"];
-    }
+    // if(json["product"]["nutriscore_data"]["is_beverage"] != null){
+    //   type = json["product"]["nutriscore_data"]["is_beverage"];
+    // }
     String? productType;
     num? serveSize;
     if(type == 1){

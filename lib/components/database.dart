@@ -1,13 +1,9 @@
-import 'dart:async';
 import 'dart:core';
-import 'dart:ui';
-
 import 'package:cfl_app/DataClasses/TrafficValues.dart';
 import 'package:cfl_app/DataClasses/dietLog.dart';
 import 'package:cfl_app/DataClasses/nutritionGoals.dart';
 import 'package:cfl_app/DataClasses/product.dart';
-import 'package:cfl_app/userData.dart';
-
+import 'package:cfl_app/DataClasses/userData.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
@@ -18,6 +14,12 @@ class DatabaseService {
   DatabaseService({
     this.uid,
   }) {
+    // userData = FirebaseFirestore.instance.collection('UserInfo');
+    // userDocRef = userData.doc(uid);
+    // accountDetails = userDocRef.collection("account");
+    // nutritionDetails = userDocRef.collection("Diary");
+    // productDetails = userDocRef.collection("products");
+    // productDB = FirebaseFirestore.instance.collection('ProductDB');
     userData = FirebaseFirestore.instance.collection('Users');
     userDocRef = userData.doc(uid);
     accountDetails = userDocRef.collection("account");
@@ -71,7 +73,9 @@ class DatabaseService {
       toFirestore: (UserData values, _) => values.toFirestore(),
     );
     return ref.snapshots().map((doc) => doc.data()).handleError((error) {
-      print('Error getting MTL stream: $error');
+      if (kDebugMode) {
+        print('Error getting MTL stream: $error');
+      }
     });
   }
 
@@ -128,11 +132,6 @@ class DatabaseService {
     );
   }
 
-  addProductToMeal(Product product, String meal) async {
-    return await nutritionDetails.doc(product.dateAdded).collection('food').doc(
-        meal).set(product.toFirestore());
-  }
-
   addProduct(Product product) async {
     return await productDetails.doc(product.productID).set(
         product.toFirestore());
@@ -172,7 +171,9 @@ class DatabaseService {
       toFirestore: (NutritionGoals values, _) => values.toFirestore(),
     );
     return ref.snapshots().map((doc) => doc.data()).handleError((error) {
-      print('Error getting Nutrition goals stream: $error');
+      if (kDebugMode) {
+        print('Error getting Nutrition goals stream: $error');
+      }
     });
   }
 
@@ -182,8 +183,8 @@ class DatabaseService {
         .where('dateAdded', isEqualTo: day)
         .orderBy('timeAdded', descending: false)
         .snapshots()
-        .map((QuerySnapshot querysnapshot) {
-      return querysnapshot.docs.map((DocumentSnapshot doc) {
+        .map((QuerySnapshot snapshot) {
+      return snapshot.docs.map((DocumentSnapshot doc) {
         return Product.fromFirestore(doc);
       }).toList();
     });
@@ -194,8 +195,8 @@ class DatabaseService {
     List<String?> names = [];
     return productDetails
         .snapshots()
-        .map((QuerySnapshot querysnapshot) {
-      for (var doc in querysnapshot.docs) {
+        .map((QuerySnapshot snapshot) {
+      for (var doc in snapshot.docs) {
         Product product = Product.fromFirestore(doc);
         String? productName = product.productName;
         if (!names.contains(productName)) {

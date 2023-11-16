@@ -2,9 +2,9 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cfl_app/DataClasses/TrafficValues.dart';
 import 'package:cfl_app/DataClasses/nutritionGoals.dart';
 import 'package:flutter/material.dart';
-import '../main.dart';
-import '../DataClasses/product.dart';
-import '../valueCard.dart';
+import '../../main.dart';
+import '../../DataClasses/product.dart';
+import '../../valueCard.dart';
 
 class NotLoggedInScan extends StatefulWidget {
   final Product product;

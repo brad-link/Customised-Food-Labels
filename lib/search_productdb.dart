@@ -1,13 +1,9 @@
-import 'package:cfl_app/DataClasses/appUser.dart';
 import 'package:cfl_app/clickable_product_card.dart';
 import 'package:cfl_app/DataClasses/product.dart';
-import 'package:cfl_app/productCard.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:search_page/search_page.dart';
 
-import 'database.dart';
+import 'components/database.dart';
 
 class SearchProductDB extends StatelessWidget {
   final DateTime currentDate;
@@ -17,14 +13,12 @@ class SearchProductDB extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Product> searchProducts;
     return Scaffold(
       body: StreamBuilder<List<Product>>(
         stream: DatabaseService().getDBProducts(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Product> savedProducts = snapshot.data!;
-            searchProducts = snapshot.data!;
             return ListView.builder(
                 itemCount: savedProducts.length,
                 itemBuilder: (context, index) {

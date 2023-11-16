@@ -1,31 +1,29 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cfl_app/components/add_product_to_db.dart';
-import 'package:cfl_app/DataClasses/dietLog.dart';
 import 'package:cfl_app/DataClasses/nutritionGoals.dart';
-import 'package:cfl_app/database.dart';
+import 'package:cfl_app/components/database.dart';
 import 'package:cfl_app/DataClasses/product.dart';
 import 'package:cfl_app/valueCard.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import '../DataClasses/TrafficValues.dart';
-import '../addProduct.dart';
-import '../DataClasses/appUser.dart';
-import '../main.dart';
+import '../../DataClasses/TrafficValues.dart';
+import '../addProductScreen/addProduct.dart';
+import '../../DataClasses/appUser.dart';
+import '../../main.dart';
 
-class ScannedScreen2 extends StatefulWidget {
+class ScannedScreen extends StatefulWidget {
   final Product product;
   final DateTime date;
   final NutritionGoals? goals;
-  const ScannedScreen2(
+  const ScannedScreen(
       {Key? key, required this.product, required this.date, this.goals})
       : super(key: key);
 
   @override
-  State<ScannedScreen2> createState() => _ScannedScreen2State();
+  State<ScannedScreen> createState() => _ScannedScreenState();
 }
 
-class _ScannedScreen2State extends State<ScannedScreen2> {
+class _ScannedScreenState extends State<ScannedScreen> {
   bool servingChecked = true;
   bool gramsChecked = false;
   String? checked;
@@ -174,7 +172,7 @@ class _ScannedScreen2State extends State<ScannedScreen2> {
                                                   {
                                                     category = 'Calories';
                                                     size =
-                                                        product?.calories_100g;
+                                                        product.calories_100g;
                                                     greenValue = null;
                                                     amberValue = null;
                                                     intake =
@@ -184,7 +182,7 @@ class _ScannedScreen2State extends State<ScannedScreen2> {
                                                 case 1:
                                                   {
                                                     category = 'Fat';
-                                                    size = product?.fat_100g;
+                                                    size = product.fat_100g;
                                                     greenValue =
                                                         mtlValues?.fatGreen;
                                                     amberValue =
@@ -195,7 +193,7 @@ class _ScannedScreen2State extends State<ScannedScreen2> {
                                                 case 2:
                                                   {
                                                     category = 'Saturates';
-                                                    size = product?.sat_fat100g;
+                                                    size = product.sat_fat100g;
                                                     greenValue =
                                                         mtlValues?.satFatGreen;
                                                     amberValue =
@@ -207,7 +205,7 @@ class _ScannedScreen2State extends State<ScannedScreen2> {
                                                 case 3:
                                                   {
                                                     category = 'Carbohydrates';
-                                                    size = product?.carbs_100g;
+                                                    size = product.carbs_100g;
                                                     greenValue = null;
                                                     amberValue = null;
                                                     intake = personalGoals
@@ -217,7 +215,7 @@ class _ScannedScreen2State extends State<ScannedScreen2> {
                                                 case 4:
                                                   {
                                                     category = 'Sugars';
-                                                    size = product?.sugar_100g;
+                                                    size = product.sugar_100g;
                                                     greenValue =
                                                         mtlValues?.sugarGreen;
                                                     amberValue =
@@ -230,7 +228,7 @@ class _ScannedScreen2State extends State<ScannedScreen2> {
                                                   {
                                                     category = 'Protein';
                                                     size =
-                                                        product?.protein_100g;
+                                                        product.protein_100g;
                                                     greenValue = null;
                                                     amberValue = null;
                                                     intake =
@@ -240,7 +238,7 @@ class _ScannedScreen2State extends State<ScannedScreen2> {
                                                 case 6:
                                                   {
                                                     category = 'Salt';
-                                                    size = product?.salt_100g;
+                                                    size = product.salt_100g;
                                                     greenValue =
                                                         mtlValues?.saltGreen;
                                                     amberValue =
@@ -252,7 +250,7 @@ class _ScannedScreen2State extends State<ScannedScreen2> {
                                                 case 7:
                                                   {
                                                     category = 'Fibre';
-                                                    size = product?.fibre_100g;
+                                                    size = product.fibre_100g;
                                                     greenValue = null;
                                                     amberValue = null;
                                                     intake =
@@ -266,9 +264,9 @@ class _ScannedScreen2State extends State<ScannedScreen2> {
                                               } else if (selectedPortion ==
                                                   productServing) {
                                                 portion =
-                                                    product?.serving_quantity;
+                                                    product.serving_quantity;
                                                 print(
-                                                    product?.serving_quantity);
+                                                    product.serving_quantity);
                                               } else if (selectedPortion ==
                                                   '1$measurement' /*|| selectedPortion == '1ml'*/) {
                                                 portion = 1;

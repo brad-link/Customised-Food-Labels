@@ -1,14 +1,12 @@
 import 'package:cfl_app/DataClasses/nutritionGoals.dart';
 import 'package:cfl_app/main.dart';
-import 'package:cfl_app/screens/home/homeScreen.dart';
-import 'package:cfl_app/userData.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:cfl_app/DataClasses/userData.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wheel_chooser/wheel_chooser.dart';
 
-import 'DataClasses/appUser.dart';
-import 'database.dart';
+import '../../DataClasses/appUser.dart';
+import '../../components/database.dart';
 
 class MacroSelection extends StatefulWidget {
   final UserData userData;
@@ -34,7 +32,7 @@ class _MacroSelectionState extends State<MacroSelection> {
     carbGoal = widget.userData.carbPercentage!;
     fatGoal = widget.userData.fatPercentage!;
     proteinGoal = widget.userData.proteinPercentage!;
-    totalPercentage = fatGoal! + carbGoal! + proteinGoal!;
+    totalPercentage = fatGoal + carbGoal + proteinGoal;
   }
 
   @override
@@ -45,7 +43,6 @@ class _MacroSelectionState extends State<MacroSelection> {
           stream: DatabaseService(uid: user?.uid).getGoals(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              NutritionGoals goals = snapshot.data!;
               calories = snapshot.data!.calories;
               dailyCarbs = snapshot.data!.carbohydrates;
               dailyProtein = snapshot.data!.protein;
@@ -104,7 +101,7 @@ class _MacroSelectionState extends State<MacroSelection> {
                                     (((calories! * carbGoal) / 100) * 4)
                                         .toInt();
                                 totalPercentage =
-                                    fatGoal! + carbGoal! + proteinGoal!;
+                                    fatGoal + carbGoal + proteinGoal;
                               });
                             },
                           ),
@@ -124,7 +121,7 @@ class _MacroSelectionState extends State<MacroSelection> {
                                 dailyProtein =
                                     (((calories! * val) / 100) * 4).toInt();
                                 totalPercentage =
-                                    fatGoal! + carbGoal! + proteinGoal!;
+                                    fatGoal + carbGoal + proteinGoal;
                               });
                             },
                           ),
@@ -144,7 +141,7 @@ class _MacroSelectionState extends State<MacroSelection> {
                                 dailyFat =
                                     (((calories! * val) / 100) * 9).toInt();
                                 totalPercentage =
-                                    fatGoal! + carbGoal! + proteinGoal!;
+                                    fatGoal + carbGoal + proteinGoal;
                               });
                             },
                           ),
@@ -161,7 +158,7 @@ class _MacroSelectionState extends State<MacroSelection> {
                               backgroundColor: myColor.withOpacity(0.15),
                             ),
                             onPressed: () => Navigator.pop(context),
-                            child: Text('cancel')),
+                            child: const Text('cancel')),
                         ElevatedButton(
                             onPressed: totalPercentage == 100
                                 ? () async {
@@ -179,9 +176,6 @@ class _MacroSelectionState extends State<MacroSelection> {
                                         proteinPercentage: proteinGoal,
                                         fatPercentage: fatGoal,
                                         weightGoal: widget.userData.weightGoal);
-                                    print(update.height);
-                                    print(update.weight);
-                                    print(update.age);
                                     await DatabaseService(uid: user?.uid)
                                         .updateUser(update);
                                     NutritionGoals goals =

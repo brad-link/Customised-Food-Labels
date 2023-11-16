@@ -1,15 +1,10 @@
-
 import 'package:cfl_app/DataClasses/nutritionGoals.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 import '../DataClasses/appUser.dart';
-import '../database.dart';
-import '../macro_selection.dart';
-import '../userData.dart';
-import 'diet_settings.dart';
+import '../components/database.dart';
+import '../DataClasses/userData.dart';
+import 'settings/diet_settings.dart';
 
 class SettingsForm extends StatefulWidget {
   final UserData? userData;
@@ -22,8 +17,7 @@ class SettingsForm extends StatefulWidget {
 class _SettingsFormState extends State<SettingsForm> {
     final _formKey = GlobalKey<FormState>();
     bool? custom;
-    num? _currentWeight;
-    num? _height;
+
 
     @override
   void initState() {
@@ -41,11 +35,6 @@ class _SettingsFormState extends State<SettingsForm> {
           builder: (context, snapshot){
             if(snapshot.hasData) {
               UserData? userInfo = snapshot.data;
-              print(custom);
-              //custom = userInfo?.custom;
-              int? carbPercent = userInfo?.carbPercentage;
-              int? proteinPercent = userInfo?.proteinPercentage;
-              int? fatPercent = userInfo?.fatPercentage;
               return Scaffold(
               appBar: AppBar(
                 title: const Text('update details'),

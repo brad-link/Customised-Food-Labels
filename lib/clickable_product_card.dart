@@ -1,14 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cfl_app/DataClasses/product.dart';
-import 'package:cfl_app/screens/ScannedScreen2.dart';
-import 'package:cfl_app/screens/not_custom_scanned.dart';
+import 'package:cfl_app/screens/productView/ScannedScreen.dart';
+import 'package:cfl_app/screens/productView/not_custom_scanned.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'DataClasses/appUser.dart';
 import 'DataClasses/dietLog.dart';
 import 'DataClasses/nutritionGoals.dart';
-import 'database.dart';
+import 'components/database.dart';
 import 'main.dart';
 
 class ClickableProductCard extends StatefulWidget {
@@ -47,7 +47,7 @@ class _ClickableProductCardState extends State<ClickableProductCard> {
                 context,
                 MaterialPageRoute(
                     builder: (context) =>
-                        ScannedScreen2(
+                        ScannedScreen(
                             product: product, goals: goals, date: widget.date)));
           } else{
             if(!mounted) return;

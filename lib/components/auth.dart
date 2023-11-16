@@ -1,14 +1,10 @@
 import 'package:cfl_app/DataClasses/TrafficValues.dart';
 import 'package:cfl_app/DataClasses/dietLog.dart';
-import 'package:cfl_app/database.dart';
-import 'package:cfl_app/userData.dart';
+import 'package:cfl_app/components/database.dart';
+import 'package:cfl_app/DataClasses/userData.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
 import '../DataClasses/appUser.dart';
 import 'dart:core';
-
-import '../database.dart';
-import '../DataClasses/dietLog.dart';
 
 //auth class for handling firebase authorisation
 class Auth{

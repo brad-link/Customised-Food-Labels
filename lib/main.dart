@@ -1,24 +1,15 @@
-
 import 'package:cfl_app/Wrapper.dart';
 import 'package:cfl_app/DataClasses/appUser.dart';
 import 'package:cfl_app/components/auth.dart';
-import 'package:cfl_app/screens/authenticate/login_screen.dart';
-import 'package:cfl_app/screens/authenticate/register.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'nutritionInfo.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 
-final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //debugPaintSizeEnabled = true;
   await Firebase.initializeApp();
   FirebaseFirestore.instance.settings = const Settings(
     persistenceEnabled: true,

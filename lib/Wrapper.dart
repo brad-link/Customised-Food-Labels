@@ -1,7 +1,6 @@
 
 
 import 'package:cfl_app/DataClasses/appUser.dart';
-import 'package:cfl_app/components/auth.dart';
 import 'package:cfl_app/screens/home/default_homescreen.dart';
 import 'package:cfl_app/screens/home/homeScreen.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,7 +12,6 @@ class Wrapper extends StatelessWidget{
     final user = Provider.of<AppUser?>(context);
     if (user ==  null){
       return const DefaultHomeScreen();
-      //BarcodeScanner();
     } else{
       return const HomeScreen();
     }

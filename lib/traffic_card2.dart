@@ -1,4 +1,3 @@
-import 'package:cfl_app/main.dart';
 import 'package:cfl_app/traffic_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +20,7 @@ class TrafficCard2 extends StatelessWidget {
           context: context,
           builder: (context) {
             return Container(
-              padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 5.0),
+              padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 5.0),
               child:  TrafficSheet(
                 choice: choice,
                 green: value1,
@@ -37,7 +36,7 @@ class TrafficCard2 extends StatelessWidget {
         nutritionSettings();
       },
       child:
-      Padding(padding: EdgeInsets.all(5),
+      Padding(padding: const EdgeInsets.all(5),
       child:Container(
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.1),
@@ -47,7 +46,7 @@ class TrafficCard2 extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Padding(
-              padding: EdgeInsets.all(3.0),
+              padding: const EdgeInsets.all(3.0),
               child: Text(
                 textAlign: TextAlign.center,
                 '$category values per 100g',

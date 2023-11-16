@@ -1,14 +1,11 @@
-import 'package:cfl_app/screens/diet_settings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 import '../DataClasses/appUser.dart';
 import '../DataClasses/nutritionGoals.dart';
-import '../database.dart';
-import '../macro_selection.dart';
-import '../userData.dart';
+import '../components/database.dart';
+import '../DataClasses/userData.dart';
 import 'home/homeScreen.dart';
 
 class NutritionGoalsSetup extends StatefulWidget {
