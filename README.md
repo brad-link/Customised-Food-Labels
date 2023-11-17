@@ -1,4 +1,4 @@
-# NutriMateApp
+# CFL
 
 A new Flutter project.
 
